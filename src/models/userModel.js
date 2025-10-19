@@ -24,6 +24,6 @@ const userSchema = new mongoose.Schema({
     verifyTokenExpiry: Date,
 })
 
-const User = mongoose.models.User || mongoose.model("users", userSchema); // if model already exists, use it. Otherwise, create a new model called "users".
+const User = mongoose.models.User || mongoose.model("User", userSchema); // if model already exists, use it. Otherwise, create a new model called "users".
 
 export default User;
