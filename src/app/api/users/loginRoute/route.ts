@@ -35,7 +35,18 @@ export async function POST(request: NextRequest) {
         };
 
         //create token
-        const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET!, {expiresIn: '1h'});
+        const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET!, {expiresIn: '1d'}); // '!' asserts that TOKEN_SECRET is not undefined. Takes 3 arguments: payload, secret, options
+        const response = NextResponse.json({
+            message: "Login successful",
+            success: true // indicates that the login was successful and sends a 200 status code by default. This is useful for the client to know that the request was processed successfully. It's not understood by browsers but can be used by client-side code to handle responses appropriately.
+    })
+
+        // Set cookie
+        response.cookies.set("token", token, { // "token" is the name of the cookie, token is the value of the cookie
+            httpOnly: true, // prevents client-side JavaScript from accessing the cookie, enhancing security against XSS attacks.
+        });
+
+        return response;
 
     } catch (error: any) {
         return NextResponse.json({error: error.message}, 
