@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server'
  
 export function middleware(request: NextRequest) { //"request: NextRequest" is saying that request is of type "NextRequest" and is typescript
   const path = request.nextUrl.pathname; // nextUrl and pathName are properties of NextRequest. This line gets the current path from the request URL such as /login or /profile
-  const isPublicPath = path === '/login' || path === '/signup';
+  const isPublicPath = path === '/login' || path === '/signup' || path === '/verifyemail';
 
   const token = request.cookies.get('token')?.value || '' // Get the token from cookies. If no token, set to empty string
   
@@ -26,5 +26,6 @@ export const config = {
     '/profile/:path*',
     '/login',
     '/signup',
+    '/verifyemail'
   ]
 }
