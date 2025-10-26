@@ -31,6 +31,20 @@ export default function loginPage() {
         }
     }
 
+    const forgotPassword = async () => {
+        try {
+            setLoading(true);
+            router.push("/forgotpassword");
+        } catch (error:any) {
+            console.log("forgot password failed", error.message);
+            toast.error(error.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+
+
     useEffect(() => {
         if(user.email.length > 0 && user.password.length > 0) {
             setButtonDisabled(false);
@@ -64,6 +78,11 @@ export default function loginPage() {
             onClick={onLogin}
             className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600"
             >Login here</button>
+
+            <button
+            onClick={forgotPassword}
+            className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600"
+            >Forgot Password</button>
             <Link href="/signup">Visit signup page</Link>
         </div>
 }
