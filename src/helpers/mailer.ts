@@ -19,11 +19,10 @@ export const sendEmail = async({email, emailType, userId}:any) => {
              forgotPasswordTokenExpiry: Date.now() + 3600000})
             }
 
-            const transporter = nodemailer.createTransport({
-                // Looking to send emails in production? Check out our Email API/SMTP product!
-             host: "sandbox.smtp.mailtrap.io",
-             port: 2525,
-             auth: {
+            const transporter = nodemailer.createTransport({ //create transport creates a transporter object that connects to an email service
+             host: "sandbox.smtp.mailtrap.io", //What mail service to connect to
+             port: 2525, //mailtrap uses port 2525 for it's sandbox
+             auth: { //login credentials for mailtrap account
              user: process.env.NODE_MAILER_USER,
              pass: process.env.NODE_MAILER_PASS
         }});
@@ -40,7 +39,7 @@ export const sendEmail = async({email, emailType, userId}:any) => {
             </p>`
         }
 
-        const mailResponse = await transporter.sendMail(mailOptions);
+        const mailResponse = await transporter.sendMail(mailOptions); //transporter.sendMail is an async function provided by Nodemailer that connect to the SMTP server and passes along the mailOptions data
         return mailResponse;
 
     } catch (error:any) {
