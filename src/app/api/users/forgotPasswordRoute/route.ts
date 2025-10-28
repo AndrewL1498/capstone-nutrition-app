@@ -1,12 +1,10 @@
 import {connect} from "@/dbConfig/dbConfig";
 import User from "@/models/userModel";
 import {NextRequest, NextResponse} from "next/server";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
+// import dotenv from "dotenv";
 import { sendEmail } from "@/helpers/mailer"
 
-dotenv.config();
+// dotenv.config();
  
 
 connect()

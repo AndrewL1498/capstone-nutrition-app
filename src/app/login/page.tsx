@@ -10,7 +10,7 @@ export default function loginPage() {
     const [user, setUser] = React.useState({
         email: "",
         password: "",
-        username: ""
+        username: "" //username is not currently being used. I may find a use for it later, but not now
     })
 
     const [buttonDisabled, setButtonDisabled] = React.useState(false);

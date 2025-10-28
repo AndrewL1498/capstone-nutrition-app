@@ -20,6 +20,25 @@ export async function POST(request: NextRequest) {
         if (user) {
             return NextResponse.json({ message: "User already exists" }, { status: 400 })
         }
+        
+        // Min length check
+        if (password.length < 6){
+            return NextResponse.json({message: "Password must be at least 6 characters long"}, {status: 400})
+        }
+
+        // Max length check
+        if (password.length > 30){
+            return NextResponse.json({message: "Password can be no longer than 30 characters"}, {status: 400})
+        }
+
+        // Check for at least one special character
+        const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
+        if (!specialCharRegex.test(password) ){
+            return NextResponse.json(
+            { message: "Password must contain at least one special character" },
+            { status: 400 }
+    );
+} 
 
         // Hash password
         const salt = await bcrypt.genSalt(10)

@@ -1,20 +1,22 @@
 "use client";
 import Link from "next/link";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
 
 export default function SignUpPage() {
     const router = useRouter();
-    const [user, setUser] = React.useState({ //Sets the user state to an object with empty email, password, and username fields
+    const [user, setUser] = useState({ //Sets the user state to an object with empty email, password, and username fields
         email: "",
         password: "",
         username: ""
     })
 
-    const [buttonDisabled, setButtonDisabled] = React.useState(false); //Sets the buttonDisabled state to false initially
-    const [loading, setLoading] = React.useState(false); //Sets the loading state to false initially
+    const [errorMessage, setErrorMessage] = useState(""); //Sets the errorMessage state to an empty string initially
+
+    const [buttonDisabled, setButtonDisabled] = useState(false); //Sets the buttonDisabled state to false initially
+    const [loading, setLoading] = useState(false); //Sets the loading state to false initially
 
     const onSignup = async () => {
         try {
@@ -24,7 +26,7 @@ export default function SignUpPage() {
             router.push("/login"); //After a successful signup, navigate to the login page
         } catch (error:any) { //Typescript type annotation specifying that error can be of any type
             console.log("Signup failed", error.message);
-            toast.error(error.message); //Displays an error toast notification with the error message if signup fails
+            setErrorMessage(error.response?.data?.message || "An error occurred"); //Displays an error toast notification with the error message if signup fails
         }finally {
             setLoading(false); //Sets loading state to false when signup process ends regardless of success or failure
         }
@@ -75,5 +77,6 @@ export default function SignUpPage() {
             className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600"
             >{buttonDisabled ? "No signup" : "Signup"}</button> {/* Renders a button with text based on buttonDisabled state */}
             <Link href="/login">Visit login page</Link>
+            {errorMessage && <p className="text-green-600">{errorMessage}</p>}
         </div>
 }
