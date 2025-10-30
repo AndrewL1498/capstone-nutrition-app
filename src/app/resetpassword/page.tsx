@@ -3,13 +3,14 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function ResetPasswordPage() {
 
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [token, setToken] = useState("");
-    const [userMessage, setUserMessage] = useState("");
+    const router = useRouter();
 
     useEffect(() => {
         const urlToken = window.location.search.split("=")[1];
@@ -20,9 +21,10 @@ export default function ResetPasswordPage() {
     
         try{
             const response = await axios.post("/api/users/resetPasswordRoute", {token, newPassword, confirmPassword});
-            setUserMessage(response.data.message); 
+            toast.success(response.data.message);
+            router.push("/login");
         } catch(error:any){
-            setUserMessage(error.response?.data?.message || "An error occurred"); 
+            toast.error(error.response?.data?.message || "An error occurred"); 
         }
     }
 
@@ -46,7 +48,6 @@ export default function ResetPasswordPage() {
                 placeholder="Confirm new password"
             />
             <button onClick={resetPassword}>Change Password</button>
-            {userMessage && <p className="text-green-600">{userMessage}</p>}
         </div>
     )
 }
