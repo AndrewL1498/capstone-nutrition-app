@@ -21,40 +21,83 @@ export async function POST(req: NextRequest) {
     } = data;
 
     // Build request body for Edamam API
-    const requestBody = {
-      size: size || 7, // default 7 days
-      plan: {
+const requestBody = {
+  size: size || 7, // default 7 days
+  plan: {
+    accept: {
+      all: [
+        {
+          health: healthLabels || [] // top-level health labels include allergies & diet
+        }
+      ]
+    },
+    fit: {
+      ENERC_KCAL: {
+        min: calories?.min || 1000,
+        max: calories?.max || 2000
+      }
+    },
+    sections: {
+      Breakfast: {
         accept: {
           all: [
-            {
-              health: healthLabels || []
-            }
+            { dish: sections?.Breakfast?.dishes || [] },
+            { meal: sections?.Breakfast?.meals || [] }
           ]
         },
         fit: {
           ENERC_KCAL: {
-            min: calories?.min || 1000,
-            max: calories?.max || 2000
+            min: 100,
+            max: 600
           }
+        }
+      },
+      Lunch: {
+        accept: {
+          all: [
+            { dish: sections?.Lunch?.dishes || [] },
+            { meal: sections?.Lunch?.meals || [] }
+          ]
         },
-        sections: sections || {} // use sections provided or empty object
+        fit: {
+          ENERC_KCAL: {
+            min: 300,
+            max: 900
+          }
+        }
+      },
+      Dinner: {
+        accept: {
+          all: [
+            { dish: sections?.Dinner?.dishes || [] },
+            { meal: sections?.Dinner?.meals || [] }
+          ]
+        },
+        fit: {
+          ENERC_KCAL: {
+            min: 200,
+            max: 900
+          }
+        }
       }
-    };
+    }
+  }
+};
 
     // Call Edamam Meal Planner API
     const response = await fetch(
       `https://api.edamam.com/api/meal-planner/v1/${EDAMAM_APP_ID}/select?app_key=${EDAMAM_APP_KEY}`,
       {
         method: "POST",
-        headers: {
+        headers: { // Set content type to JSON
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify(requestBody), // Convert requestBody object to JSON string
       }
     );
 
     if (!response.ok) { //response.ok checks if the response status code is in the range 200-299 because the fetch function does not throw an error for HTTP error statuses
-      const errorText = await response.text();
+      const errorText = await response.text(); // Read the response body as text for more detailed error information and it's a safer way to handle non-JSON error responses
       return NextResponse.json({ error: errorText }, { status: response.status });
     }
 
