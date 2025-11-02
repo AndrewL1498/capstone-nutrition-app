@@ -14,15 +14,21 @@ export async function POST(req: NextRequest) {
 
     //destructures the data object to extract size, healthLabels, calories, and sections
     const {
-      size,
       healthLabels, // array of health labels like ["DAIRY_FREE", "SOY_FREE"]
       calories,     // object like { min: 1500, max: 2000 }
-      sections      // object with Breakfast, Lunch, Dinner sections
+      sections,      // object with Breakfast, Lunch, Dinner sections
+      breakfastMin,
+      breakfastMax,
+      lunchMin,
+      lunchMax,
+      dinnerMin,
+      dinnerMax,
+      // selectedMealTypes
     } = data;
 
     // Build request body for Edamam API
 const requestBody = {
-  size: size || 7, // default 7 days
+  size: 7, // default 7 days
   plan: {
     accept: {
       all: [
@@ -47,8 +53,8 @@ const requestBody = {
         },
         fit: {
           ENERC_KCAL: {
-            min: 100,
-            max: 600
+            min: breakfastMin,
+            max: breakfastMax
           }
         }
       },
@@ -61,8 +67,8 @@ const requestBody = {
         },
         fit: {
           ENERC_KCAL: {
-            min: 300,
-            max: 900
+            min: lunchMin,
+            max: lunchMax
           }
         }
       },
@@ -75,8 +81,8 @@ const requestBody = {
         },
         fit: {
           ENERC_KCAL: {
-            min: 200,
-            max: 900
+            min: dinnerMin,
+            max: dinnerMax
           }
         }
       }

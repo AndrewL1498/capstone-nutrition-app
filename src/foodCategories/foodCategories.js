@@ -1,39 +1,39 @@
 const healthLabels = [
-  "alcohol-cocktail",
+  // "alcohol-cocktail",
   "alcohol-free",
-  "celery-free",
-  "crustacean-free",
-  "dairy-free",
+  // "celery-free",
+  // "crustacean-free",
+  // "dairy-free",
   "DASH",
-  "egg-free",
-  "fish-free",
-  "fodmap-free",
-  "gluten-free",
-  "immuno-supportive",
+  // "egg-free",
+  // "fish-free",
+  // "fodmap-free",
+  // "gluten-free",
+  // "immuno-supportive",
   "keto-friendly",
   "kidney-friendly",
-  "kosher",
+  // "kosher",
   "low-potassium",
   "low-sugar",
-  "lupine-free",
+  // "lupine-free",
   "Mediterranean",
   "mollusk-free",
-  "mustard-free",
+  // "mustard-free",
   "no-oil-added",
   "paleo",
-  "peanut-free",
+  // "peanut-free",
   "pecatarian",
   "pork-free",
   "red-meat-free",
-  "sesame-free",
-  "shellfish-free",
-  "soy-free",
+  // "sesame-free",
+  // "shellfish-free",
+  // "soy-free",
   "sugar-conscious",
   "sulfite-free",
-  "tree-nut-free",
+  // "tree-nut-free",
   "vegan",
   "vegetarian",
-  "wheat-free"
+  // "wheat-free"
 ];
 
 const allergyLabels = [
@@ -55,7 +55,7 @@ const allergyLabels = [
   "wheat-free"
 ];
 
-const cuisineTypes = [
+const cuisineTypes = [ //counts as a health label in the API
   "american",
   "asian",
   "british",
@@ -109,10 +109,11 @@ const dishTypes = [
 
 const mealTypes = [
   "breakfast",
-  "brunch",
-  "lunch/dinner",
-  "snack",
-  "teatime"
+  // "brunch",
+  "lunch",
+  "dinner",
+  // "snack",
+  // "teatime"
 ];
 
 export { healthLabels, allergyLabels, cuisineTypes, dishTypes, mealTypes };
