@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
 
     //destructures the data object to extract size, healthLabels, calories, and sections
     const {
-      healthLabels, // array of health labels like ["DAIRY_FREE", "SOY_FREE"]
+      healthPrefs, // array of health labels like ["DAIRY_FREE", "SOY_FREE"]
       calories,     // object like { min: 1500, max: 2000 }
       sections,      // object with Breakfast, Lunch, Dinner sections
       breakfastMin,
@@ -33,7 +33,7 @@ const requestBody = {
     accept: {
       all: [
         {
-          health: healthLabels || [] // top-level health labels include allergies & diet
+          health: healthPrefs || [] // top-level health labels include allergies & diet
         }
       ]
     },
@@ -89,6 +89,9 @@ const requestBody = {
     }
   }
 };
+
+
+console.log("Request Body for Edamam:", requestBody);
 
     // Call Edamam Meal Planner API
     const response = await fetch(

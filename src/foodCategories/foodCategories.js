@@ -22,7 +22,7 @@ const healthLabels = [
   "no-oil-added",
   "paleo",
   // "peanut-free",
-  "pecatarian",
+  "pescatarian",
   "pork-free",
   "red-meat-free",
   // "sesame-free",
