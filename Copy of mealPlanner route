@@ -258,138 +258,128 @@
 
 
 
-// // /app/api/mealPlan/route.ts
-import { NextRequest, NextResponse } from "next/server";
-import { getDataFromToken } from "@/helpers/getDataFromToken";
+// // // /app/api/mealPlan/route.ts
+// import { NextRequest, NextResponse } from "next/server";
 
-const EDAMAM_APP_ID = process.env.EDAMAM_APP_ID; // e.g. c4cf182d
-const EDAMAM_APP_KEY = process.env.EDAMAM_APP_KEY; // your secret key
+// const EDAMAM_APP_ID = process.env.EDAMAM_APP_ID; // e.g. c4cf182d
+// const EDAMAM_APP_KEY = process.env.EDAMAM_APP_KEY; // your secret key
 
-export async function POST(req: NextRequest) {
-  try {
-    const userId = await getDataFromToken(req);
-    const accountUser = userId; // fallback to default
-    const {           healthPrefs,
-          calories,
-          sections,
-          breakfastMin,
-          breakfastMax,
-          lunchMin,
-          lunchMax,
-          dinnerMin,
-          dinnerMax } = await req.json();
+// export async function POST(req: NextRequest) {
+//   try {
+//     const { user } = await req.json(); // optional: can be used to send Edamam-Account-User dynamically
+//     const accountUser = user || "user123"; // fallback to default
 
-    // ✅ Build your request body (same as your curl example)
-    const body = {
-      size: 7,
-      plan: {
-        accept: {
-          all: [
-            {
-              health: ["SOY_FREE", "FISH_FREE", "MEDITERRANEAN"],
-            },
-          ],
-        },
-        fit: {
-          ENERC_KCAL: { min: 1000, max: 2000 },
-          "SUGAR.added": { max: 20 },
-        },
-        exclude: [
-          "http://www.edamam.com/ontologies/edamam.owl#recipe_x",
-          "http://www.edamam.com/ontologies/edamam.owl#recipe_y",
-          "http://www.edamam.com/ontologies/edamam.owl#recipe_z",
-        ],
-        sections: {
-          Breakfast: {
-            accept: {
-              all: [
-                {
-                  dish: [
-                    "drinks",
-                    "egg",
-                    "biscuits and cookies",
-                    "bread",
-                    "pancake",
-                    "cereals",
-                  ],
-                },
-                { meal: ["breakfast"] },
-              ],
-            },
-            fit: { ENERC_KCAL: { min: 100, max: 600 } },
-          },
-          Lunch: {
-            accept: {
-              all: [
-                {
-                  dish: [
-                    "main course",
-                    "pasta",
-                    "egg",
-                    "salad",
-                    "soup",
-                    "sandwiches",
-                    "pizza",
-                    "seafood",
-                  ],
-                },
-                { meal: ["lunch/dinner"] },
-              ],
-            },
-            fit: { ENERC_KCAL: { min: 300, max: 900 } },
-          },
-          Dinner: {
-            accept: {
-              all: [
-                {
-                  dish: [
-                    "seafood",
-                    "egg",
-                    "salad",
-                    "pizza",
-                    "pasta",
-                    "main course",
-                  ],
-                },
-                { meal: ["lunch/dinner"] },
-              ],
-            },
-            fit: { ENERC_KCAL: { min: 200, max: 900 } },
-          },
-        },
-      },
-    };
+//     // ✅ Build your request body (same as your curl example)
+//     const body = {
+//       size: 7,
+//       plan: {
+//         accept: {
+//           all: [
+//             {
+//               health: ["SOY_FREE", "FISH_FREE", "MEDITERRANEAN"],
+//             },
+//           ],
+//         },
+//         fit: {
+//           ENERC_KCAL: { min: 1000, max: 2000 },
+//           "SUGAR.added": { max: 20 },
+//         },
+//         exclude: [
+//           "http://www.edamam.com/ontologies/edamam.owl#recipe_x",
+//           "http://www.edamam.com/ontologies/edamam.owl#recipe_y",
+//           "http://www.edamam.com/ontologies/edamam.owl#recipe_z",
+//         ],
+//         sections: {
+//           Breakfast: {
+//             accept: {
+//               all: [
+//                 {
+//                   dish: [
+//                     "drinks",
+//                     "egg",
+//                     "biscuits and cookies",
+//                     "bread",
+//                     "pancake",
+//                     "cereals",
+//                   ],
+//                 },
+//                 { meal: ["breakfast"] },
+//               ],
+//             },
+//             fit: { ENERC_KCAL: { min: 100, max: 600 } },
+//           },
+//           Lunch: {
+//             accept: {
+//               all: [
+//                 {
+//                   dish: [
+//                     "main course",
+//                     "pasta",
+//                     "egg",
+//                     "salad",
+//                     "soup",
+//                     "sandwiches",
+//                     "pizza",
+//                     "seafood",
+//                   ],
+//                 },
+//                 { meal: ["lunch/dinner"] },
+//               ],
+//             },
+//             fit: { ENERC_KCAL: { min: 300, max: 900 } },
+//           },
+//           Dinner: {
+//             accept: {
+//               all: [
+//                 {
+//                   dish: [
+//                     "seafood",
+//                     "egg",
+//                     "salad",
+//                     "pizza",
+//                     "pasta",
+//                     "main course",
+//                   ],
+//                 },
+//                 { meal: ["lunch/dinner"] },
+//               ],
+//             },
+//             fit: { ENERC_KCAL: { min: 200, max: 900 } },
+//           },
+//         },
+//       },
+//     };
 
-    // ✅ Build Basic Auth header
-    const authHeader = `Basic ${Buffer.from(
-      `${EDAMAM_APP_ID}:${EDAMAM_APP_KEY}`
-    ).toString("base64")}`;
+//     // ✅ Build Basic Auth header
+//     const authHeader = `Basic ${Buffer.from(
+//       `${EDAMAM_APP_ID}:${EDAMAM_APP_KEY}`
+//     ).toString("base64")}`;
 
-    // ✅ Send request to Edamam
-    const response = await fetch(
-      `https://api.edamam.com/api/meal-planner/v1/${EDAMAM_APP_ID}/select?type=public`,
-      {
-        method: "POST",
-        headers: {
-          "accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": authHeader,
-          "Edamam-Account-User": accountUser,
-        },
-        body: JSON.stringify(body),
-      }
-    );
+//     // ✅ Send request to Edamam
+//     const response = await fetch(
+//       `https://api.edamam.com/api/meal-planner/v1/${EDAMAM_APP_ID}/select?type=public`,
+//       {
+//         method: "POST",
+//         headers: {
+//           "accept": "application/json",
+//           "Content-Type": "application/json",
+//           "Authorization": authHeader,
+//           "Edamam-Account-User": accountUser,
+//         },
+//         body: JSON.stringify(body),
+//       }
+//     );
 
-    const data = await response.json();
+//     const data = await response.json();
 
-    if (!response.ok) {
-      console.error("Edamam API error:", data);
-      return NextResponse.json({ error: data }, { status: response.status });
-    }
+//     if (!response.ok) {
+//       console.error("Edamam API error:", data);
+//       return NextResponse.json({ error: data }, { status: response.status });
+//     }
 
-    return NextResponse.json(data);
-  } catch (error: any) {
-    console.error("Meal plan API error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-}
+//     return NextResponse.json(data);
+//   } catch (error: any) {
+//     console.error("Meal plan API error:", error);
+//     return NextResponse.json({ error: error.message }, { status: 500 });
+//   }
+// }
