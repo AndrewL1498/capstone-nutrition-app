@@ -21,8 +21,8 @@ export default function UserDetailsPage() {
     
     const [sections, setSections] = useState<SectionsState>({
     Breakfast: { dishes: [], meals: ["breakfast"] },
-    Lunch: { dishes: [], meals: ["lunch"] },
-    Dinner: { dishes: [], meals: ["dinner"] },
+    Lunch: { dishes: [], meals: ["lunch/dinner"] },
+    Dinner: { dishes: [], meals: ["lunch/dinner"] },
 });
 
 

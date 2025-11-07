@@ -269,7 +269,8 @@ export async function POST(req: NextRequest) {
   try {
     const userId = await getDataFromToken(req);
     const accountUser = userId; // fallback to default
-    const {           healthPrefs,
+    const {
+          healthPrefs,
           calories,
           sections,
           breakfastMin,
@@ -286,13 +287,15 @@ export async function POST(req: NextRequest) {
         accept: {
           all: [
             {
-              health: ["SOY_FREE", "FISH_FREE", "MEDITERRANEAN"],
+              health: healthPrefs || [],
             },
           ],
         },
         fit: {
-          ENERC_KCAL: { min: 1000, max: 2000 },
-          "SUGAR.added": { max: 20 },
+      ENERC_KCAL: {
+        min: calories?.min || 1000,
+        max: calories?.max || 2000
+      }
         },
         exclude: [
           "http://www.edamam.com/ontologies/edamam.owl#recipe_x",
@@ -303,16 +306,8 @@ export async function POST(req: NextRequest) {
           Breakfast: {
             accept: {
               all: [
-                {
-                  dish: [
-                    "drinks",
-                    "egg",
-                    "biscuits and cookies",
-                    "bread",
-                    "pancake",
-                    "cereals",
-                  ],
-                },
+            { dish: sections?.Breakfast?.dishes || [] },
+            { meal: sections?.Breakfast?.meals || [] },
                 { meal: ["breakfast"] },
               ],
             },
@@ -379,6 +374,11 @@ export async function POST(req: NextRequest) {
         body: JSON.stringify(body),
       }
     );
+
+   console.log(`breakfastMin: ${breakfastMin}, breakfastMax: ${breakfastMax}, lunchMin: ${lunchMin}, lunchMax: ${lunchMax}, dinnerMin: ${dinnerMin}, dinnerMax: ${dinnerMax}`);
+   console.log(`caloriesMin: ${calories.min}`, `caloriesMax: ${calories.max}`);
+   console.log(`breakfast dishes: ${sections.Breakfast.dishes}, lunch dishes: ${sections.Lunch.dishes}, dinner dishes: ${sections.Dinner.dishes}`);
+   console.log(`breakfast meals: ${sections.Breakfast.meals}, lunch meals: ${sections.Lunch.meals}, dinner meals: ${sections.Dinner.meals}`);
 
     const data = await response.json();
 
