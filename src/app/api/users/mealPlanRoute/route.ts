@@ -265,6 +265,9 @@ import { getDataFromToken } from "@/helpers/getDataFromToken";
 const EDAMAM_APP_ID = process.env.EDAMAM_APP_ID; // e.g. c4cf182d
 const EDAMAM_APP_KEY = process.env.EDAMAM_APP_KEY; // your secret key
 
+const RECIPE_SEARCH_ID = process.env.RECIPE_SEARCH_ID;
+const RECIPE_SEARCH_KEY = process.env.RECIPE_SEARCH_KEY;
+
 export async function POST(req: NextRequest) {
   try {
     const userId = await getDataFromToken(req);
@@ -377,11 +380,54 @@ if (data.status !== "OK") {
   );
 }
 
+
+
+ const enhancedMealPlan = await Promise.all(
+      data.selection.map(async (day: any) => {
+        const enhancedSections: any = {};
+        for (const [mealName, meal] of Object.entries(day.sections)) {
+          const recipeUri = (meal as any).assigned;
+          const recipeId = recipeUri?.split("#recipe_")[1];
+
+          if (!recipeId) {
+            enhancedSections[mealName] = { assigned: recipeUri };
+            continue;
+          }
+
+          try {
+            const recipeResponse = await fetch(
+              `https://api.edamam.com/api/recipes/v2/${recipeId}?type=public`,
+              { headers: { Authorization: authHeader } }
+            );
+            const recipeData = await recipeResponse.json();
+
+            if (recipeData?.recipe) {
+              enhancedSections[mealName] = {
+                assigned: recipeUri,
+                label: recipeData.recipe.label,
+                image: recipeData.recipe.image,
+                url: recipeData.recipe.url,
+              };
+            } else {
+              enhancedSections[mealName] = { assigned: recipeUri };
+            }
+          } catch (err) {
+            console.error("Error fetching recipe details:", err);
+            enhancedSections[mealName] = { assigned: recipeUri };
+          }
+        }
+        return { sections: enhancedSections };
+      })
+    );
+
+
+
+
 // ✅ 3. Success
 return NextResponse.json({
   success: true,
   message: "Meal plan generated successfully!",
-  mealPlan: data.selection,
+  mealPlan: enhancedMealPlan,
 });
 } catch (error: any) {
   console.error("Meal plan API error:", error);
