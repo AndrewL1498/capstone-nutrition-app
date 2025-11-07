@@ -284,13 +284,13 @@ export async function POST(req: NextRequest) {
     const body = {
       size: 7,
       plan: {
-        accept: {
-          all: [
-            {
-              health: healthPrefs || [],
-            },
-          ],
-        },
+          accept: {
+            all: [
+              ...(healthPrefs && healthPrefs.length > 0 // Only include the health filter if there are selected preferences for health prefs
+                ? [{ health: healthPrefs }]
+                : []),
+            ],
+          },
         fit: {
       ENERC_KCAL: {
         min: calories?.min || 1000,
@@ -366,8 +366,7 @@ export async function POST(req: NextRequest) {
 if (!response.ok) {
   console.error("Edamam API network error:", data);
   return NextResponse.json(
-    { success: false, message: "Unable to contact recipe database. Please try again later." },
-    { status: response.status }
+    { success: false, message: "Api error occurred while fetching meal plan." },
   );
 }
 

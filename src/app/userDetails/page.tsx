@@ -30,7 +30,6 @@ export default function UserDetailsPage() {
     // percentages for each meal
     const breakfastRatio = 0.25;
     const lunchRatio = 0.35;
-    const dinnerRatio = 0.40;
 
     const breakfastMin = Math.floor(calories.min * breakfastRatio);
     const breakfastMax = Math.floor(calories.max * breakfastRatio);
@@ -155,7 +154,7 @@ const handleClickDishTypesDinner = (label: string) => {
                 {label}
             </button>
             )}
-            {cuisineTypes.map((label, index) =>
+            {/* {cuisineTypes.map((label, index) =>
             <button
                 key={index}
                 onClick={() => handleClickDiets(label)}
@@ -163,7 +162,7 @@ const handleClickDishTypesDinner = (label: string) => {
             >
                 {label}
             </button>
-            )}
+            )} */}
             <h2>Allergies</h2>
             {allergyLabels.map((label, index) =>
             <button

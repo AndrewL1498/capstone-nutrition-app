@@ -22,6 +22,43 @@ const userSchema = new mongoose.Schema({
     forgotPasswordTokenExpiry: Date,
     verifyToken: String,
     verifyTokenExpiry: Date,
+
+userDetails: {
+  diet: { type: String, default: "" },
+  healthPrefs: { type: [String], default: [] },
+  calories: { type: Number, default: 2000 },
+  
+  // Add sections directly here
+  sections: {
+    Breakfast: {
+      dishes: { type: [String], default: [] },
+      meals: { type: [String], default: ["breakfast"] },
+    },
+    Lunch: {
+      dishes: { type: [String], default: [] },
+      meals: { type: [String], default: ["lunch/dinner"] },
+    },
+    Dinner: {
+      dishes: { type: [String], default: [] },
+      meals: { type: [String], default: ["lunch/dinner"] },
+    },
+  },
+},
+
+
+  // ✅ Last generated meal plan
+  mealPlan: {
+    selection: [
+      {
+        label: String,
+        calories: Number,
+        image: String,
+        url: String,
+      },
+    ],
+    status: { type: String, default: "NONE" },
+    generatedAt: { type: Date },
+  },
 })
 
 const User = mongoose.models.User || mongoose.model("User", userSchema); // if model already exists, use it. Otherwise, create a new model called "users".
