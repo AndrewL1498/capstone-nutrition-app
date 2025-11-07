@@ -308,48 +308,27 @@ export async function POST(req: NextRequest) {
               all: [
             { dish: sections?.Breakfast?.dishes || [] },
             { meal: sections?.Breakfast?.meals || [] },
-                { meal: ["breakfast"] },
               ],
             },
-            fit: { ENERC_KCAL: { min: 100, max: 600 } },
+            fit: { ENERC_KCAL: { min: breakfastMin, max: breakfastMax } },
           },
           Lunch: {
             accept: {
               all: [
-                {
-                  dish: [
-                    "main course",
-                    "pasta",
-                    "egg",
-                    "salad",
-                    "soup",
-                    "sandwiches",
-                    "pizza",
-                    "seafood",
-                  ],
-                },
-                { meal: ["lunch/dinner"] },
+                { dish: sections?.Lunch?.dishes || [] },
+                { meal: sections?.Lunch?.meals || [] }
               ],
             },
-            fit: { ENERC_KCAL: { min: 300, max: 900 } },
+            fit: { ENERC_KCAL: { min: lunchMin, max: lunchMax } },
           },
           Dinner: {
             accept: {
               all: [
-                {
-                  dish: [
-                    "seafood",
-                    "egg",
-                    "salad",
-                    "pizza",
-                    "pasta",
-                    "main course",
-                  ],
-                },
-                { meal: ["lunch/dinner"] },
+                { dish: sections?.Dinner?.dishes || [] },
+                { meal: sections?.Dinner?.meals || [] }
               ],
             },
-            fit: { ENERC_KCAL: { min: 200, max: 900 } },
+            fit: { ENERC_KCAL: { min: dinnerMin, max: dinnerMax} },
           },
         },
       },
@@ -375,6 +354,7 @@ export async function POST(req: NextRequest) {
       }
     );
 
+  console.log(`healthPrefs: ${healthPrefs}`);
    console.log(`breakfastMin: ${breakfastMin}, breakfastMax: ${breakfastMax}, lunchMin: ${lunchMin}, lunchMax: ${lunchMax}, dinnerMin: ${dinnerMin}, dinnerMax: ${dinnerMax}`);
    console.log(`caloriesMin: ${calories.min}`, `caloriesMax: ${calories.max}`);
    console.log(`breakfast dishes: ${sections.Breakfast.dishes}, lunch dishes: ${sections.Lunch.dishes}, dinner dishes: ${sections.Dinner.dishes}`);
@@ -382,14 +362,33 @@ export async function POST(req: NextRequest) {
 
     const data = await response.json();
 
-    if (!response.ok) {
-      console.error("Edamam API error:", data);
-      return NextResponse.json({ error: data }, { status: response.status });
-    }
+// ✅ 1. Handle network or HTTP-level errors
+if (!response.ok) {
+  console.error("Edamam API network error:", data);
+  return NextResponse.json(
+    { success: false, message: "Unable to contact recipe database. Please try again later." },
+    { status: response.status }
+  );
+}
 
-    return NextResponse.json(data);
-  } catch (error: any) {
-    console.error("Meal plan API error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
+// ✅ 2. Handle Edamam returning a valid response but with an unsuccessful status
+if (data.status !== "OK") {
+  return NextResponse.json(
+    { success: false, message: "No matching recipes found for your preferences. Please try again." },
+  );
+}
+
+// ✅ 3. Success
+return NextResponse.json({
+  success: true,
+  message: "Meal plan generated successfully!",
+  mealPlan: data.selection,
+});
+} catch (error: any) {
+  console.error("Meal plan API error:", error);
+  return NextResponse.json(
+    { success: false, message: "Server error while generating meal plan." },
+    { status: 500 }
+  );
+}
 }

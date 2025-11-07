@@ -6,6 +6,7 @@ import axios from "axios";
 import User from "@/models/userModel";
 import { connect } from "@/dbConfig/dbConfig";
 import { healthLabels, allergyLabels, cuisineTypes, dishTypes, mealTypes } from "@/foodCategories/foodCategories"; 
+import toast from "react-hot-toast";
 
 connect(); // Establishes a connection to the database using the connect function from dbConfig
 
@@ -118,6 +119,11 @@ const handleClickDishTypesDinner = (label: string) => {
           dinnerMin,
           dinnerMax
         });
+
+        if (!response.data.success) {
+          toast.error(response.data.message);
+          return;
+        }
         console.log('Meal plan generated:', response.data);
       } catch (error:any) {
         console.error('Error generating meal plan:', error.response?.data || error.message);
