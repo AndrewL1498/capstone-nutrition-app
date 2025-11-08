@@ -27,6 +27,10 @@ export default function ProfilePage() {
         setData(res.data.data._id);
     }
 
+    const userDetailsPage = () => {
+        router.push(`/userDetails`)
+    }
+
     return (
         <div className="flex flex-col items-center justify-center min-h-screen py-2">
             <h1>Profile</h1>
@@ -42,6 +46,10 @@ export default function ProfilePage() {
         <button onClick={getUserDetails}
         className="bg-green-800 mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
         Get User Details</button>
+
+        <button onClick={userDetailsPage}
+        className="bg-green-800 mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Go to User Details</button>
 
         </div>
     )

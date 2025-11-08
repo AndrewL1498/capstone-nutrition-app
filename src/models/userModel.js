@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import mealSectionSchema from "./mealSectionSchema";
 import mealDaySchema from "./mealDaySchema";
 
 const userSchema = new mongoose.Schema({
@@ -32,15 +31,15 @@ userDetails: {
   
   // Add sections directly here
   sections: {
-      Breakfast: { type: mealSectionSchema, default: () => ({ meals: ["breakfast"] }) },
-      Lunch: { type: mealSectionSchema, default: () => ({ meals: ["lunch/dinner"] }) },
-      Dinner: { type: mealSectionSchema, default: () => ({ meals: ["lunch/dinner"] }) },
-  },
+    Breakfast: { dishes: { type: [String], default: () => [] }, meals: { type: [String], default: () => ["breakfast"] } },
+    Lunch: { dishes: { type: [String], default: () => [] }, meals: { type: [String], default: () => ["lunch/dinner"] } },
+    Dinner: { dishes: { type: [String], default: () => [] }, meals: { type: [String], default: () => ["lunch/dinner"] } },
+  }
 },
 
 
   // Last generated meal plan
-  mealPlan: { type: [MealDaySchema], default: [] },
+  mealPlan: { type: [mealDaySchema], default: [] },
   mealPlanStatus: { type: String, default: "NONE" },
   mealPlanGeneratedAt: { type: Date }
 

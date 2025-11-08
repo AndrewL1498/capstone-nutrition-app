@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
-import mealSectionSchema from "./mealSectionSchema";
+import mealDetailsSchema from "./mealDetailsSchema";
 
-const MealDaySchema = new mongoose.Schema({
+const mealDaySchema = new mongoose.Schema({
   sections: {
-    Breakfast: { type: mealSectionSchema, default: () => ({}) },
-    Lunch: { type: mealSectionSchema, default: () => ({}) },
-    Dinner: { type: mealSectionSchema, default: () => ({}) },
+    Breakfast: { type: mealDetailsSchema, default: () => ({}) }, // type schema means the field is a sub-document
+    Lunch: { type: mealDetailsSchema, default: () => ({}) },
+    Dinner: { type: mealDetailsSchema, default: () => ({}) },
   }
 });
 
-export default MealDaySchema;
+export default mealDaySchema;
