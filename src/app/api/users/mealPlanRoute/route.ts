@@ -262,8 +262,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 
-const EDAMAM_APP_ID = process.env.EDAMAM_APP_ID; // e.g. c4cf182d
-const EDAMAM_APP_KEY = process.env.EDAMAM_APP_KEY; // your secret key
+const MEAL_PLANNER_APP_ID = process.env.MEAL_PLANNER_APP_ID; // e.g. c4cf182d
+const MEAL_PLANNER_APP_KEY = process.env.MEAL_PLANNER_APP_KEY; // your secret key
 
 const RECIPE_SEARCH_ID = process.env.RECIPE_SEARCH_ID;
 const RECIPE_SEARCH_KEY = process.env.RECIPE_SEARCH_KEY;
@@ -338,53 +338,55 @@ export async function POST(req: NextRequest) {
     };
 
     // ✅ Build Basic Auth header
-    const authHeader = `Basic ${Buffer.from(
-      `${EDAMAM_APP_ID}:${EDAMAM_APP_KEY}`
+    const mealPlannerAuth = `Basic ${Buffer.from(
+      `${MEAL_PLANNER_APP_ID}:${MEAL_PLANNER_APP_KEY}`
     ).toString("base64")}`;
 
     // ✅ Send request to Edamam
-    const response = await fetch(
-      `https://api.edamam.com/api/meal-planner/v1/${EDAMAM_APP_ID}/select?type=public`,
+    const mealPlannerResponse = await fetch(
+      `https://api.edamam.com/api/meal-planner/v1/${MEAL_PLANNER_APP_ID}/select?type=public`,
       {
         method: "POST",
         headers: {
           "accept": "application/json",
           "Content-Type": "application/json",
-          "Authorization": authHeader,
+          "Authorization": mealPlannerAuth,
           "Edamam-Account-User": accountUser,
         },
         body: JSON.stringify(body),
       }
     );
 
-  console.log(`healthPrefs: ${healthPrefs}`);
+   console.log(`healthPrefs: ${healthPrefs}`);
    console.log(`breakfastMin: ${breakfastMin}, breakfastMax: ${breakfastMax}, lunchMin: ${lunchMin}, lunchMax: ${lunchMax}, dinnerMin: ${dinnerMin}, dinnerMax: ${dinnerMax}`);
    console.log(`caloriesMin: ${calories.min}`, `caloriesMax: ${calories.max}`);
    console.log(`breakfast dishes: ${sections.Breakfast.dishes}, lunch dishes: ${sections.Lunch.dishes}, dinner dishes: ${sections.Dinner.dishes}`);
    console.log(`breakfast meals: ${sections.Breakfast.meals}, lunch meals: ${sections.Lunch.meals}, dinner meals: ${sections.Dinner.meals}`);
 
-    const data = await response.json();
+    const plannerData = await mealPlannerResponse.json();
 
 // ✅ 1. Handle network or HTTP-level errors
-if (!response.ok) {
-  console.error("Edamam API network error:", data);
+if (!mealPlannerResponse.ok) {
+  console.error("Edamam API network error:", plannerData);
   return NextResponse.json(
     { success: false, message: "Api error occurred while fetching meal plan." },
   );
 }
 
 // ✅ 2. Handle Edamam returning a valid response but with an unsuccessful status
-if (data.status !== "OK") {
+if (plannerData.status !== "OK") {
   return NextResponse.json(
     { success: false, message: "No matching recipes found for your preferences. Please try again." },
   );
 }
 
+ const recipeAuth = `Basic ${Buffer.from(`${RECIPE_SEARCH_ID}:${RECIPE_SEARCH_KEY}`).toString("base64")}`;
 
 
  const enhancedMealPlan = await Promise.all(
-      data.selection.map(async (day: any) => {
+      plannerData.selection.map(async (day: any) => {
         const enhancedSections: any = {};
+
         for (const [mealName, meal] of Object.entries(day.sections)) {
           const recipeUri = (meal as any).assigned;
           const recipeId = recipeUri?.split("#recipe_")[1];
@@ -395,10 +397,15 @@ if (data.status !== "OK") {
           }
 
           try {
-            const recipeResponse = await fetch(
-              `https://api.edamam.com/api/recipes/v2/${recipeId}?type=public`,
-              { headers: { Authorization: authHeader } }
-            );
+const recipeResponse = await fetch(
+  `https://api.edamam.com/api/recipes/v2/${recipeId}?type=public&app_id=${RECIPE_SEARCH_ID}&app_key=${RECIPE_SEARCH_KEY}`,
+  { 
+    method: "GET",
+    headers: { accept: "application/json" }
+  }
+);
+
+
             const recipeData = await recipeResponse.json();
 
             if (recipeData?.recipe) {
@@ -407,6 +414,8 @@ if (data.status !== "OK") {
                 label: recipeData.recipe.label,
                 image: recipeData.recipe.image,
                 url: recipeData.recipe.url,
+                calories: recipeData.recipe.calories,
+                cuisineType: recipeData.recipe.cuisineType,
               };
             } else {
               enhancedSections[mealName] = { assigned: recipeUri };

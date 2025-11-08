@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import mealSectionSchema from "./mealSectionSchema";
+import mealDaySchema from "./mealDaySchema";
 
 const userSchema = new mongoose.Schema({
     username: { type: String, 
@@ -30,35 +32,18 @@ userDetails: {
   
   // Add sections directly here
   sections: {
-    Breakfast: {
-      dishes: { type: [String], default: [] },
-      meals: { type: [String], default: ["breakfast"] },
-    },
-    Lunch: {
-      dishes: { type: [String], default: [] },
-      meals: { type: [String], default: ["lunch/dinner"] },
-    },
-    Dinner: {
-      dishes: { type: [String], default: [] },
-      meals: { type: [String], default: ["lunch/dinner"] },
-    },
+      Breakfast: { type: mealSectionSchema, default: () => ({ meals: ["breakfast"] }) },
+      Lunch: { type: mealSectionSchema, default: () => ({ meals: ["lunch/dinner"] }) },
+      Dinner: { type: mealSectionSchema, default: () => ({ meals: ["lunch/dinner"] }) },
   },
 },
 
 
-  // ✅ Last generated meal plan
-  mealPlan: {
-    selection: [
-      {
-        label: String,
-        calories: Number,
-        image: String,
-        url: String,
-      },
-    ],
-    status: { type: String, default: "NONE" },
-    generatedAt: { type: Date },
-  },
+  // Last generated meal plan
+  mealPlan: { type: [MealDaySchema], default: [] },
+  mealPlanStatus: { type: String, default: "NONE" },
+  mealPlanGeneratedAt: { type: Date }
+
 })
 
 const User = mongoose.models.User || mongoose.model("User", userSchema); // if model already exists, use it. Otherwise, create a new model called "users".
