@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "generateSecret.mjs", "src/models/mealDetailsSchema.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "generateSecret.mjs", "src/models/mealDetailsSchema.js", "src/scripts/updateUsersWithNewFields.js"],
   "exclude": ["node_modules"]
 }
