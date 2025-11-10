@@ -261,6 +261,10 @@
 // // /app/api/mealPlan/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
+import User from "@/models/userModel";
+import { connect } from "@/dbConfig/dbConfig";
+
+connect(); // Ensure DB connection is established
 
 const MEAL_PLANNER_APP_ID = process.env.MEAL_PLANNER_APP_ID; // e.g. c4cf182d
 const MEAL_PLANNER_APP_KEY = process.env.MEAL_PLANNER_APP_KEY; // your secret key
@@ -364,6 +368,7 @@ export async function POST(req: NextRequest) {
    console.log(`breakfast meals: ${sections.Breakfast.meals}, lunch meals: ${sections.Lunch.meals}, dinner meals: ${sections.Dinner.meals}`);
 
     const plannerData = await mealPlannerResponse.json();
+    console.log("Edamam Meal Planner Response:", plannerData);
 
 // ✅ 1. Handle network or HTTP-level errors
 if (!mealPlannerResponse.ok) {
@@ -380,35 +385,32 @@ if (plannerData.status !== "OK") {
   );
 }
 
- const recipeAuth = `Basic ${Buffer.from(`${RECIPE_SEARCH_ID}:${RECIPE_SEARCH_KEY}`).toString("base64")}`;
-
-
  const enhancedMealPlan = await Promise.all(
-      plannerData.selection.map(async (day: any) => {
-        const enhancedSections: any = {};
+      plannerData.selection.map(async (day: any) => { // .selection is an array of days/objects that is displayed on the backend. We set day to any to avoid TS errors
+        const enhancedSections: any = {}; // will hold the enhanced meal data for Breakfast, Lunch, Dinner
 
-        for (const [mealName, meal] of Object.entries(day.sections)) {
-          const recipeUri = (meal as any).assigned;
-          const recipeId = recipeUri?.split("#recipe_")[1];
+        for (const [mealName, meal] of Object.entries(day.sections)) { //destructures day.sections into mealName (Breakfast, Lunch, Dinner) and meal (the meal object)
+          const recipeUri = (meal as any).assigned; // assigned the recipe URI. Type is set to any because the value of meal.assigned could be anything; an array, string, object, etc.
+          const recipeId = recipeUri?.split("#recipe_")[1]; // Question mark is saying to only try to split if recipeUri is defined. Split splits the string into an array at the point where "#recipe_" occurs and takes the second part [1] which is the actual recipe ID
 
           if (!recipeId) {
-            enhancedSections[mealName] = { assigned: recipeUri };
-            continue;
+            enhancedSections[mealName] = { assigned: recipeUri }; //If key is a variable you have to use bracket notation to set the value. This runs for every loop if there is no recipeId
+            continue; // skip to the next iteration of the for loop instead of executing the rest of the code in this loop
           }
 
           try {
-const recipeResponse = await fetch(
-  `https://api.edamam.com/api/recipes/v2/${recipeId}?type=public&app_id=${RECIPE_SEARCH_ID}&app_key=${RECIPE_SEARCH_KEY}`,
-  { 
-    method: "GET",
-    headers: { accept: "application/json" }
-  }
-);
+            const recipeResponse = await fetch( // Recipe API works best without Auth header because it's public data
+              `https://api.edamam.com/api/recipes/v2/${recipeId}?type=public&app_id=${RECIPE_SEARCH_ID}&app_key=${RECIPE_SEARCH_KEY}`,
+              { 
+                method: "GET",
+                headers: { accept: "application/json" }
+              }
+            );
 
 
             const recipeData = await recipeResponse.json();
 
-            if (recipeData?.recipe) {
+            if (recipeData?.recipe) { // optional chaining to check if recipeData and recipeData.recipe exist and are not null or undefined
               enhancedSections[mealName] = {
                 assigned: recipeUri,
                 label: recipeData.recipe.label,
@@ -429,6 +431,20 @@ const recipeResponse = await fetch(
       })
     );
 
+// Save to database
+await User.findByIdAndUpdate(
+  userId,
+  {
+    "userDetails.healthPrefs": healthPrefs,
+    "userDetails.calories.min": calories.min,
+    "userDetails.calories.max": calories.max,
+    "userDetails.sections": sections,
+    mealPlan: enhancedMealPlan,
+    mealPlanStatus: "GENERATED",
+    mealPlanGeneratedAt: new Date(),
+  },
+  { new: true }
+);
 
 
 

@@ -25,9 +25,11 @@ const userSchema = new mongoose.Schema({
     verifyTokenExpiry: Date,
 
 userDetails: {
-  diet: { type: String, default: "" },
   healthPrefs: { type: [String], default: [] },
-  calories: { type: Number, default: 2000 },
+  calories: { 
+    min: { type: Number, default: 1000 },
+    max: { type: Number, default: 2000 }, 
+  },
   
   // Add sections directly here
   sections: {
