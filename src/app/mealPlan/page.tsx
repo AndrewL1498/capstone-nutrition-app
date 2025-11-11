@@ -87,7 +87,7 @@ export default function MealPlanPage() {
                     <h3>{mealType}</h3>
                     {meal.image && <img src={meal.image} alt={meal.label} />}
                     <p className="label">{meal.label}</p>
-                    <p className="details">Calories: {meal.calories}</p>
+                    <p className="details">Calories: {Math.round(meal.calories)}</p>
                     {meal.cuisineType.length > 0 && (
                       <p className="cuisine-type">{meal.cuisineType.join(", ")}</p>
                     )}
