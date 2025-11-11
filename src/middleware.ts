@@ -27,5 +27,7 @@ export const config = {
     '/login',
     '/signup',
     '/verifyemail',
+    '/userDetails',
+    '/mealPlan'
   ]
 }

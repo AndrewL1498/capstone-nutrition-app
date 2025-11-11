@@ -1,0 +1,112 @@
+/* mealPlan.css */
+
+/* General page setup */
+.meal-plan-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: #161616;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+/* Heading */
+.meal-plan-page h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+/* Day container */
+.meal-day {
+  width: 100%;
+  max-width: 900px;
+  background-color: #363636;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+}
+
+/* Day header */
+.meal-day h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #e67e22;
+}
+
+/* Meals container */
+.meals {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Individual meal card */
+.meal-card {
+  flex: 1 1 250px; /* grow, shrink, basis */
+  background-color: #717171;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.meal-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+/* Meal title */
+.meal-card h3 {
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+}
+
+/* Recipe image */
+.meal-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+}
+
+/* Recipe label */
+.meal-card .label {
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+/* Calories and cuisine type */
+.meal-card .details {
+  font-size: 0.9rem;
+  color: #ffffff;
+  margin-bottom: 0.25rem;
+}
+
+.meal-card .cuisine-type {
+  font-style: italic;
+  color: #ffffff;
+}
+
+/* Recipe link */
+.meal-card a {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.3rem 0.6rem;
+  background-color: #e67e22;
+  color: #fff;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.meal-card a:hover {
+  background-color: #d35400;
+}
