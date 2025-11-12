@@ -7,7 +7,9 @@ interface MealDetailsProps {
   meal: {
     label: string;
     image?: string;
-    calories: number;
+    totalCalories: number;
+    caloriesPerServing: number;
+    servings: number;
     cuisineType?: string[];
     ingredients?: string[];
     nutrients?: Record<string, { quantity: number; unit: string }>;
@@ -15,6 +17,7 @@ interface MealDetailsProps {
   };
   onClose: () => void;
 }
+
 
 export default function MealDetails({ meal, onClose }: MealDetailsProps) { //destructure meal and onClose from MealDetailsProps. The ": MealDetailsProps" defines the shape of the props object.      
   if (!meal) return null;
@@ -25,7 +28,9 @@ export default function MealDetails({ meal, onClose }: MealDetailsProps) { //des
         <button className="close-button" onClick={onClose}>X</button>
         <h2>{meal.label}</h2>
         {meal.image && <img src={meal.image} alt={meal.label} />}
-        <p>Calories: {Math.round(meal.calories)}</p>
+        <p>totalCalories: {Math.round(meal.totalCalories)}</p>
+        <p>caloriesPerServing: {Math.round(meal.caloriesPerServing)}</p>
+        <p>servings: {meal.servings}</p>
         {meal.cuisineType && meal.cuisineType.length > 0 && (
           <p>Cuisine: {meal.cuisineType.join(", ")}</p>
         )}

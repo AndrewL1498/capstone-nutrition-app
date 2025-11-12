@@ -149,23 +149,45 @@ if (plannerData.status !== "OK") {
             const recipeData = await recipeResponse.json();
             console.log(`Recipe data returned for ${mealName}, ID ${recipeId}:`, recipeData);
 
+            if (!recipeData?.recipe) {
+            console.warn(`Recipe data not found for recipeId ${recipeId}. Skipping...`);
+            enhancedSections[mealName] = { assigned: recipeUri };
+            continue;
+}
+
+            const totalCalories = recipeData.recipe.calories; // total for recipe
+            const servings = recipeData.recipe.yield || 1;    // number of servings (fallback 1)
+            const caloriesPerServing = totalCalories / servings; // calculate per serving
+
+            const nutrientsPerServing: Record<string, { quantity: number; unit: string }> = {};
+
+            for (const [key, value] of Object.entries(recipeData.recipe.totalNutrients as Record<string, { quantity: number; unit: string }>)) {
+              nutrientsPerServing[key] = {
+                quantity: value.quantity / servings,
+                unit: value.unit,
+              };
+            }
+
+
             if (recipeData?.recipe) { // optional chaining to check if recipeData and recipeData.recipe exist and are not null or undefined
               enhancedSections[mealName] = {
                 assigned: recipeUri,
                 label: recipeData.recipe.label,
                 image: recipeData.recipe.image,
                 url: recipeData.recipe.url,
-                calories: recipeData.recipe.calories,
+                totalCalories: totalCalories,
+                caloriesPerServing: caloriesPerServing,
                 cuisineType: recipeData.recipe.cuisineType,
                 ingredients: recipeData.recipe.ingredientLines,
-                nutrients: recipeData.recipe.totalNutrients,
+                nutrients: nutrientsPerServing,
+                servings: servings,
               };
             } else {
               enhancedSections[mealName] = { assigned: recipeUri };
             }
           } catch (err) {
             console.error("Error fetching recipe details:", err);
-            enhancedSections[mealName] = { assigned: recipeUri };
+            enhancedSections[mealName] = { assigned: recipeUri, error: "Usage Limits Exceeded" };
           }
         }
         return { sections: enhancedSections };
