@@ -1,0 +1,102 @@
+/* mealDetails.css */
+
+/* Full-screen backdrop */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* semi-transparent black */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal content box */
+.modal-content {
+  background-color: #fff;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 24px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  position: relative;
+}
+
+/* Close button */
+.close-button {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background-color: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Meal title */
+.modal-content h2 {
+  margin-bottom: 16px;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+/* Meal image */
+.modal-content img {
+  width: 100%;
+  max-height: 250px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+/* Section headers */
+.modal-content h3 {
+  margin-top: 16px;
+  margin-bottom: 8px;
+  font-size: 1.2rem;
+}
+
+/* Ingredients and nutrients list */
+.modal-content ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin-bottom: 16px;
+}
+
+/* Individual nutrient or ingredient */
+.modal-content li {
+  margin-bottom: 4px;
+  font-size: 1rem;
+}
+
+/* External recipe link */
+.modal-content a {
+  display: inline-block;
+  margin-top: 16px;
+  color: #fff;
+  background-color: #4CAF50;
+  padding: 10px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  text-align: center;
+  transition: background-color 0.2s ease;
+}
+
+.modal-content a:hover {
+  background-color: #45a049;
+}
+
+/* Optional scrollbar styling */
+.modal-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}

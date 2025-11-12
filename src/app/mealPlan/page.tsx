@@ -2,23 +2,26 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./mealPlan.css"; // Your separate CSS file for styling
+import MealDetails from "../Components/MealDetails"; // Make sure this path is correct
+import "./mealPlan.css"; // Your existing CSS
 
 // Interfaces
-interface MealDetails {
+interface MealDetailsType {
   assigned: string;
   label: string;
-  image: string;
-  url: string;
+  image?: string;
+  url?: string;
   calories: number;
   cuisineType: string[];
+  ingredients?: string[];
+  nutrients?: Record<string, { quantity: number; unit: string }>;
 }
 
 interface MealDay {
   sections: {
-    Breakfast: MealDetails;
-    Lunch: MealDetails;
-    Dinner: MealDetails;
+    Breakfast: MealDetailsType;
+    Lunch: MealDetailsType;
+    Dinner: MealDetailsType;
   };
 }
 
@@ -45,9 +48,11 @@ interface User {
 }
 
 export default function MealPlanPage() {
-  const [user, setUser] = useState<User | null>(null); // State to hold user data set to null initially upon load
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [selectedMeal, setSelectedMeal] = useState<MealDetailsType | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -55,16 +60,13 @@ export default function MealPlanPage() {
         const response = await axios.get("/api/users/me");
         setUser(response.data.data);
       } catch (err: any) {
-        setError(err?.response?.data?.error || "Failed to fetch user"); //Only try to access response data if error is defined and only access data if response is defined
+        setError(err?.response?.data?.error || "Failed to fetch user");
       } finally {
         setLoading(false);
       }
     };
-
     fetchUser();
   }, []);
-
-  console.log("User Data:", user);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
@@ -80,8 +82,8 @@ export default function MealPlanPage() {
           <div className="meal-day" key={index}>
             <h2>Day {index + 1}</h2>
             <div className="meals">
-              {["Breakfast", "Lunch", "Dinner"].map((mealType) => {
-                const meal: MealDetails = day.sections[mealType as keyof typeof day.sections];
+              {(["Breakfast", "Lunch", "Dinner"] as const).map((mealType) => {
+                const meal: MealDetailsType = day.sections[mealType];
                 return (
                   <div className="meal-card" key={mealType}>
                     <h3>{mealType}</h3>
@@ -91,17 +93,27 @@ export default function MealPlanPage() {
                     {meal.cuisineType.length > 0 && (
                       <p className="cuisine-type">{meal.cuisineType.join(", ")}</p>
                     )}
-                    {meal.url && (
-                      <a href={meal.url} target="_blank" rel="noopener noreferrer">
-                        View Recipe
-                      </a>
-                    )}
+                    <button
+                      onClick={() => {
+                        setSelectedMeal(meal);
+                        setIsModalOpen(true);
+                      }}
+                    >
+                      View Recipe
+                    </button>
                   </div>
                 );
               })}
             </div>
           </div>
         ))
+      )}
+
+      {isModalOpen && selectedMeal && (
+        <MealDetails
+          meal={selectedMeal}
+          onClose={() => setIsModalOpen(false)}
+        />
       )}
     </div>
   );

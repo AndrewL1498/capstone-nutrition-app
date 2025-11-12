@@ -96,17 +96,20 @@
 }
 
 /* Recipe link */
-.meal-card a {
+.meal-card button {
   display: inline-block;
   margin-top: 0.5rem;
   padding: 0.3rem 0.6rem;
-  background-color: #e67e22;
+  background-color: #e67e22; /* same orange as before */
   color: #fff;
+  border: none; /* remove default button border */
   border-radius: 5px;
   text-decoration: none;
   font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-.meal-card a:hover {
+.meal-card button:hover {
   background-color: #d35400;
 }

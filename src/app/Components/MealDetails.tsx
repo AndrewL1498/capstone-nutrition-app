@@ -16,12 +16,12 @@ interface MealDetailsProps {
   onClose: () => void;
 }
 
-export default function MealDetails({ meal, onClose }: MealDetailsProps) {
+export default function MealDetails({ meal, onClose }: MealDetailsProps) { //destructure meal and onClose from MealDetailsProps. The ": MealDetailsProps" defines the shape of the props object.      
   if (!meal) return null;
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}> {/* stopPropagation prevents closing when clicking inside modal because clicking inside should not close the modal */}
         <button className="close-button" onClick={onClose}>X</button>
         <h2>{meal.label}</h2>
         {meal.image && <img src={meal.image} alt={meal.label} />}
@@ -45,7 +45,7 @@ export default function MealDetails({ meal, onClose }: MealDetailsProps) {
             <ul>
               {Object.entries(meal.nutrients).map(([key, value]: any) => (
                 <li key={key}>
-                  {key}: {value.quantity.toFixed(2)} {value.unit}
+                  {key}: {value.quantity.toFixed(2)} {value.unit} {/* toFixed ensures two decimal places for better readability */}
                 </li>
               ))}
             </ul>
