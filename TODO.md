@@ -115,6 +115,8 @@ export async function GET(req: Request) {
 
 6. See if anything can be done about meals not showing up
 
-7. see if you can get a more accurate calorie count/estimate on meals and add the servings to the meals
+7. see if you can get a more accurate calorie count/estimate on meals and add the servings to the meals ✅
 
 8. create universal error handling (possibly optional)
+
+9. set loading on user details and update front end

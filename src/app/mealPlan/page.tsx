@@ -9,14 +9,14 @@ import "./mealPlan.css"; // Your existing CSS
 interface MealDetailsType {
   assigned: string;
   label: string;
-  image?: string;
-  url?: string;
+  image?: string; // image is optional because some meals may not have an image
+  url?: string; // url is optional because some meals may not have a url
   caloriesPerServing: number;
   totalCalories: number;
   servings: number;
   cuisineType: string[];
-  ingredients?: string[];
-  nutrients?: Record<string, { quantity: number; unit: string }>;
+  ingredients?: string[]; // ingredients is optional because some meals may not have ingredients listed or api limits may be exceeded
+  nutrients?: Record<string, { quantity: number; unit: string }>; // nutrients is optional because some meals may not have nutrients listed or api limits may be exceeded
 }
 
 interface MealDay {
@@ -46,7 +46,7 @@ interface User {
   userDetails: UserDetails;
   mealPlan: MealDay[];
   mealPlanStatus: string;
-  mealPlanGeneratedAt?: string;
+  mealPlanGeneratedAt?: string; // optional in case meal plan hasn't been generated yet
 }
 
 export default function MealPlanPage() {
@@ -103,7 +103,7 @@ export default function MealPlanPage() {
         dinnerMax
       });
 
-      setUser(prev => prev ? { ...prev, mealPlan: response.data.mealPlan } : prev);
+      setUser(prev => prev ? { ...prev, mealPlan: response.data.mealPlan } : prev); // If prev exists: spread all its properties and overwrite mealPlan. Otherwise, keep prev as is.
       console.log('Meal plan generated:', response.data);
     } catch (err: any) {
       console.error("Failed to generate meal plan:", err);
@@ -125,27 +125,27 @@ export default function MealPlanPage() {
         <div className="meal-day" key={index}>
           <h2>Day {index + 1}</h2>
           <div className="meals">
-            {(["Breakfast", "Lunch", "Dinner"] as const).map((mealType) => {
-              const meal: MealDetailsType & { error?: string } = day.sections[mealType];
+            {(["Breakfast", "Lunch", "Dinner"] as const).map((mealType) => { // 'as const' tells TypeScript to treat this array as a tuple of string literals
+              const meal: MealDetailsType & { error?: string } = day.sections[mealType]; // For each mapping over the breakfast, lunch and dinner array, we create a meal constant to hold the meal details for that mealType with an optional error property
 
               return (
                 <div className="meal-card" key={mealType}>
                   <h3>{mealType}</h3>
 
-                  {meal.error ? (
-                    <p>Recipe data unavailable due to API limits</p>
-                  ) : (
+                  {meal.error ? ( // If there is an error property on the meal object...
+                    <p>Recipe data unavailable due to API limits</p> // display this message
+                  ) : ( // Otherwise...
                     <>
-                      {meal.image && <img src={meal.image} alt={meal.label} />}
+                      {meal.image && <img src={meal.image} alt={meal.label} />} {/* Display image if it exists */}
                       <p className="label">{meal.label || "Recipe name unavailable"}</p>
                       <p className="details">
-                        totalCalories: {meal.totalCalories ? Math.round(meal.totalCalories) : "N/A"}
+                        totalCalories: {meal.totalCalories ? Math.round(meal.totalCalories) : "N/A"} {/* if totalCalories exists, round it; otherwise display "N/A" */}
                       </p>
                       <p className="details">
-                        caloriesPerServing: {meal.caloriesPerServing ? Math.round(meal.caloriesPerServing) : "N/A"}
+                        caloriesPerServing: {meal.caloriesPerServing ? Math.round(meal.caloriesPerServing) : "N/A"} {/* if caloriesPerServing exists, round it; otherwise display "N/A" */}
                       </p>
-                      {(meal.cuisineType || []).length > 0 && (
-                        <p className="cuisine-type">{meal.cuisineType.join(", ")}</p>
+                      {(meal.cuisineType || []).length > 0 && ( // check if cuisineType exists and has length greater than 0. If so, render the paragraph, otherwise skip it
+                        <p className="cuisine-type">{meal.cuisineType.join(", ")}</p> // join array into comma-separated string
                       )}
                       <button
                         onClick={() => {
@@ -166,7 +166,7 @@ export default function MealPlanPage() {
     )}
 
     {isModalOpen && selectedMeal && (
-      <MealDetails meal={selectedMeal} onClose={() => setIsModalOpen(false)} />
+      <MealDetails meal={selectedMeal} onClose={() => setIsModalOpen(false)} /> // Pass selectedMeal and onClose handler to MealDetails component as props. Without the arrow function on onClose, it would execute immediately instead of on click
     )}
   </div>
 )}

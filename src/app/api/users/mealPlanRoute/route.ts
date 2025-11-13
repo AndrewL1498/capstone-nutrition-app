@@ -135,7 +135,7 @@ if (plannerData.status !== "OK") {
           
 
           try {
- console.log(`Fetching recipe for day, meal type: ${mealName}, recipeId:`, recipeId);
+            console.log(`Fetching recipe for day, meal type: ${mealName}, recipeId:`, recipeId);
 
             const recipeResponse = await fetch( // Recipe API works best without Auth header because it's public data
               `https://api.edamam.com/api/recipes/v2/${recipeId}?type=public&app_id=${RECIPE_SEARCH_ID}&app_key=${RECIPE_SEARCH_KEY}`,
@@ -149,20 +149,20 @@ if (plannerData.status !== "OK") {
             const recipeData = await recipeResponse.json();
             console.log(`Recipe data returned for ${mealName}, ID ${recipeId}:`, recipeData);
 
-            if (!recipeData?.recipe) {
-            console.warn(`Recipe data not found for recipeId ${recipeId}. Skipping...`);
-            enhancedSections[mealName] = { assigned: recipeUri };
-            continue;
+            if (!recipeData?.recipe) { // if recipeData or recipeData.recipe is null or undefined...
+            console.warn(`Recipe data not found for recipeId ${recipeId}. Skipping...`); // then log a warning for missing recipe data...
+            enhancedSections[mealName] = { assigned: recipeUri }; // then set the assigned URI only...
+            continue; // And skip to the next iteration of the for loop
 }
 
             const totalCalories = recipeData.recipe.calories; // total for recipe
             const servings = recipeData.recipe.yield || 1;    // number of servings (fallback 1)
             const caloriesPerServing = totalCalories / servings; // calculate per serving
 
-            const nutrientsPerServing: Record<string, { quantity: number; unit: string }> = {};
+            const nutrientsPerServing: Record<string, { quantity: number; unit: string }> = {}; // record is a typescript type meaning an object with string keys and values of the specified type
 
-            for (const [key, value] of Object.entries(recipeData.recipe.totalNutrients as Record<string, { quantity: number; unit: string }>)) {
-              nutrientsPerServing[key] = {
+            for (const [key, value] of Object.entries(recipeData.recipe.totalNutrients as Record<string, { quantity: number; unit: string }>)) { // destructure totalNutrients into key and value pairs
+              nutrientsPerServing[key] = { // Assign key value pairs and store in nutrientsPerServing object
                 quantity: value.quantity / servings,
                 unit: value.unit,
               };

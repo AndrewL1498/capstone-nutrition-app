@@ -15,7 +15,7 @@ interface MealDetailsProps {
     nutrients?: Record<string, { quantity: number; unit: string }>;
     url?: string;
   };
-  onClose: () => void;
+  onClose: () => void; // void is a return type that indicates the function does not return a value
 }
 
 
@@ -23,11 +23,11 @@ export default function MealDetails({ meal, onClose }: MealDetailsProps) { //des
   if (!meal) return null;
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
+    <div className="modal-backdrop" onClick={onClose}> {/* clicking anywhere outside the modal will close it */}
       <div className="modal-content" onClick={(e) => e.stopPropagation()}> {/* stopPropagation prevents closing when clicking inside modal because clicking inside should not close the modal */}
         <button className="close-button" onClick={onClose}>X</button>
         <h2>{meal.label}</h2>
-        {meal.image && <img src={meal.image} alt={meal.label} />}
+        {meal.image && <img src={meal.image} alt={meal.label} />} {/* Display image if it exists. alt displays if the image fails to load */}
         <p>totalCalories: {Math.round(meal.totalCalories)}</p>
         <p>caloriesPerServing: {Math.round(meal.caloriesPerServing)}</p>
         <p>servings: {meal.servings}</p>
