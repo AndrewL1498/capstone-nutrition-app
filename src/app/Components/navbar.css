@@ -1,0 +1,27 @@
+.navbar {
+  width: 100%;
+  display: flex;
+  justify-content: center; /* Center the navbar horizontally */
+  gap: 1rem; /* Space between buttons */
+  padding: 1rem 0;
+ /* Subtle dark background, slightly different from page */
+  border-bottom: 1px solid #333; /* slight separation */
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar button {
+  border: none;
+  color: #fff;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.navbar button:hover {
+  background-color: #555; /* Slight highlight on hover */
+  transform: translateY(-1px); /* subtle lift effect */
+}

@@ -7,6 +7,8 @@ import User from "@/models/userModel";
 import { connect } from "@/dbConfig/dbConfig";
 import { healthLabels, allergyLabels, cuisineTypes, dishTypes, mealTypes } from "@/foodCategories/foodCategories"; 
 import toast from "react-hot-toast";
+import "./userDetails.css";
+import Navbar from "../Components/Navbar";
 
 connect(); // Establishes a connection to the database using the connect function from dbConfig
 
@@ -16,6 +18,7 @@ export default function UserDetailsPage() {
     // const [selectedMealTypes, setSelectedMealTypes] = useState<string[]>([]); //State for meal types (may or may not be used)
     const [healthPrefs, setHealthPrefs] = useState<string[]>([]); //<string[]> sets the type as an array of strings
     const [calories, setCalories] = useState({ min: 1000, max: 2000 });
+    const [loading, setLoading] = useState(false);
 
     type Section = { dishes: string[]; meals: string[] }; // Define the Section type
     type SectionsState = { Breakfast: Section; Lunch: Section; Dinner: Section }; // Define the SectionsState type
@@ -106,6 +109,8 @@ const handleClickDishTypesDinner = (label: string) => {
 
 
     const handleGenerateMealPlan = async () => {
+      setLoading(true);
+
       try {
         const response = await axios.post('/api/users/mealPlanRoute', {
           healthPrefs,
@@ -119,6 +124,11 @@ const handleClickDishTypesDinner = (label: string) => {
           dinnerMax
         });
 
+        if(response.data.success) {
+          toast.success("Meal plan generated successfully!");
+          router.push('/mealPlan'); // Navigate to meal plan page upon success
+        }
+
         if (!response.data.success) {
           toast.error(response.data.message);
           return;
@@ -126,13 +136,17 @@ const handleClickDishTypesDinner = (label: string) => {
         console.log('Meal plan generated:', response.data);
       } catch (error:any) {
         console.error('Error generating meal plan:', error.response?.data || error.message);
+        toast.error("Error generating meal plan. Please try again.");
+      } finally {
+        setLoading(false);
       }
             
     }
 ;
 
     return (
-        <div>
+        <div className="user-details-page">
+            <Navbar />
             <h1>User Details Page</h1>
             {/* <h2>Meal per day</h2>
             {mealTypes.map((label, index) =>
@@ -145,15 +159,17 @@ const handleClickDishTypesDinner = (label: string) => {
             </button>
             )} */}
             <h2>Diets</h2>
-            {healthLabels.map((label, index) =>
-            <button
-                key={index}
-                onClick={() => handleClickDiets(label)}
-                style ={{ margin: "4px", padding: "8px", backgroundColor: healthPrefs.includes(label) ? "green" : "purple" }}
-            >
-                {label}
-            </button>
-            )}
+            <div className="button-group">
+              {healthLabels.map((label, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleClickDiets(label)}
+                  className={`user-details-button ${healthPrefs.includes(label) ? "active" : ""}`}
+                >
+                      {label}
+                  </button>
+                  ))}
+                  </div>
             {/* {cuisineTypes.map((label, index) =>
             <button
                 key={index}
@@ -163,73 +179,79 @@ const handleClickDishTypesDinner = (label: string) => {
                 {label}
             </button>
             )} */}
-            <h2>Allergies</h2>
-            {allergyLabels.map((label, index) =>
-            <button
-                key={index}
-                onClick={() => handleClickAllergies(label)}
-                style ={{ margin: "4px", padding: "8px", backgroundColor: healthPrefs.includes(label) ? "green" : "purple" }}
-            >
-                {label}
-            </button>
-            )}
+              <h2>Allergies</h2>
+            <div className="button-group">
+                {allergyLabels.map((label, index) => (
+                    <button
+                        key={index}
+                        onClick={() => handleClickAllergies(label)}
+                        className={`user-details-button ${healthPrefs.includes(label) ? "active" : ""}`}
+                    >
+                        {label}
+                    </button>
+                ))}
+            </div>
+
             <h2>Calories</h2>
             <h3>Min</h3>
             <input
-              type="number"
-              placeholder="Enter calories"
-              value={calories.min} // or calories.max depending on which input
-              style={{ backgroundColor: "#f0f0f0", color: "#000000", padding: "2px", borderRadius: "4px" }}
-              onChange={(e) => setCalories(prev => ({
-                ...prev,
-                min: Number(e.target.value)
-              }))}
+                type="number"
+                className="calorie-input"
+                value={calories.min}
+                onChange={(e) => setCalories(prev => ({ ...prev, min: Number(e.target.value) }))}
             />
             <h3>Max</h3>
             <input
-              type="number"
-              placeholder="Enter calories"
-              value={calories.max} // or calories.max depending on which input
-              style={{ backgroundColor: "#f0f0f0", color: "#000000", padding: "2px", borderRadius: "4px" }}
-              onChange={(e) => setCalories(prev => ({
-                ...prev,
-                max: Number(e.target.value)
-              }))}
+                type="number"
+                className="calorie-input"
+                value={calories.max}
+                onChange={(e) => setCalories(prev => ({ ...prev, max: Number(e.target.value) }))}
             />
+
             <h2>Breakfast</h2>
-            {dishTypes.map((label, index) =>
-            <button
-                key={index}
-                onClick={() => handleClickDishTypesBreakfast(label)}
-                style ={{ margin: "4px", padding: "8px", backgroundColor: sections.Breakfast.dishes.includes(label) ? "green" : "purple" }}
-            >
-                {label}
-            </button>
-            )}
+            <div className="button-group">
+                {dishTypes.map((label, index) => (
+                    <button
+                        key={index}
+                        onClick={() => handleClickDishTypesBreakfast(label)}
+                        className={`user-details-button ${sections.Breakfast.dishes.includes(label) ? "active" : ""}`}
+                    >
+                        {label}
+                    </button>
+                ))}
+            </div>
+
             <h2>Lunch</h2>
-            {dishTypes.map((label, index) =>
-            <button
-                key={index}
-                onClick={() => handleClickDishTypesLunch(label)}
-                style ={{ margin: "4px", padding: "8px", backgroundColor: sections.Lunch.dishes.includes(label) ? "green" : "purple" }}
-            >
-                {label}
-            </button>
-            )}
+            <div className="button-group">
+                {dishTypes.map((label, index) => (
+                    <button
+                        key={index}
+                        onClick={() => handleClickDishTypesLunch(label)}
+                        className={`user-details-button ${sections.Lunch.dishes.includes(label) ? "active" : ""}`}
+                    >
+                        {label}
+                    </button>
+                ))}
+            </div>
+
             <h2>Dinner</h2>
-            {dishTypes.map((label, index) =>
-            <button
-                key={index}
-                onClick={() => handleClickDishTypesDinner(label)}
-                style ={{ margin: "4px", padding: "8px", backgroundColor: sections.Dinner.dishes.includes(label) ? "green" : "purple" }}
-            >
-                {label}
+            <div className="button-group">
+                {dishTypes.map((label, index) => (
+                    <button
+                        key={index}
+                        onClick={() => handleClickDishTypesDinner(label)}
+                        className={`user-details-button ${sections.Dinner.dishes.includes(label) ? "active" : ""}`}
+                    >
+                        {label}
+                    </button>
+                ))}
+            </div>
+
+            <button className="generate-mealplan-btn" onClick={handleGenerateMealPlan}>
+                {loading ? "Generating..." : "Generate Meal Plan"}
             </button>
-            )}
-            <br></br>
-            <button onClick={handleGenerateMealPlan}>Generate Meal Plan</button>
         </div>
+
+        
     );
-
 }
-

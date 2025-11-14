@@ -120,3 +120,7 @@ export async function GET(req: Request) {
 8. create universal error handling (possibly optional)
 
 9. set loading on user details and update front end
+
+10. delete extra profile page
+
+11. update styling on profile page

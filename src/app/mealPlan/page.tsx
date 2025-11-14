@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MealDetails from "../Components/MealDetails"; // Make sure this path is correct
 import "./mealPlan.css"; // Your existing CSS
+import Navbar from "../Components/Navbar";
 
 // Interfaces
 interface MealDetailsType {
@@ -113,6 +114,7 @@ export default function MealPlanPage() {
 
   return (
   <div className="meal-plan-page">
+    <Navbar />
     <h1>Meal Plan Page</h1>
     <button className="generate-button" onClick={handleGenerateMealPlan}>
       Generate Meal Plan

@@ -1,0 +1,129 @@
+/* USER DETAILS PAGE STYLING */
+/* Matches the dark theme & structure of mealPlan.css */
+
+/* Page container */
+.user-details-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* keeps main page centered */
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: #161616;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #ffffff;
+}
+
+/* Left-align button groups */
+.user-details-page .button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  justify-content: flex-start; /* left-align buttons */
+  align-self: flex-start;      /* override parent's center alignment */
+}
+
+
+/* Main heading */
+.user-details-page h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: #ffffff;
+}
+
+/* Section headings aligned left */
+.user-details-page h2,
+.user-details-page h3 {
+  align-self: flex-start; /* aligns headers to the left edge of the container */
+}
+
+.user-details-page h2 {
+  font-size: 1.8rem;
+  color: #e67e22;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.user-details-page h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.25rem;
+  color: #ffffff;
+}
+
+/* Button container styling if wrapped */
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Select buttons (Diet, Allergy, Dish Type) */
+.user-details-button {
+  padding: 0.5rem 0.75rem;
+  background-color: #717171;
+  border: none;
+  color: #ffffff;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.user-details-button:hover {
+  background-color: #5f5f5f;
+  transform: translateY(-3px);
+}
+
+/* Active state (selected) */
+.user-details-button.active {
+  background-color: #e67e22;
+}
+
+/* Input fields for calories */
+.calorie-input {
+  width: 120px;
+  padding: 6px 8px;
+  background-color: #363636;
+  color: #ffffff;
+  border: 1px solid #555;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* Align inputs to left */
+.user-details-page input.calorie-input {
+  align-self: flex-start;
+}
+
+.calorie-input:focus {
+  outline: none;
+  border-color: #e67e22;
+}
+
+/* Generate button */
+.generate-mealplan-btn {
+  margin-top: 2rem;
+  padding: 0.6rem 1rem;
+  background-color: #e67e22;
+  border: none;
+  color: #ffffff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: background-color 0.2s ease;
+}
+
+.generate-mealplan-btn:hover {
+  background-color: #d35400;
+}
+
+/* Optional: give sections a card-like wrapper (similar to mealDay) */
+.user-details-section {
+  width: 100%;
+  max-width: 900px;
+  background-color: #363636;
+  padding: 1.5rem;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+}
