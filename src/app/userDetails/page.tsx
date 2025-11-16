@@ -103,11 +103,6 @@ const handleClickDishTypesDinner = (label: string) => {
   }));
 };
 
-  console.log("Selected Health Preferences:", healthPrefs);
-  console.log("Selected Meal Preferences", sections);
-  console.log("Calorie Range:", calories);
-
-
     const handleGenerateMealPlan = async () => {
       setLoading(true);
 
@@ -133,7 +128,6 @@ const handleClickDishTypesDinner = (label: string) => {
           toast.error(response.data.message);
           return;
         }
-        console.log('Meal plan generated:', response.data);
       } catch (error:any) {
         console.error('Error generating meal plan:', error.response?.data || error.message);
         toast.error("Error generating meal plan. Please try again.");
@@ -147,7 +141,7 @@ const handleClickDishTypesDinner = (label: string) => {
     return (
         <div className="user-details-page">
             <Navbar />
-            <h1>User Details Page</h1>
+            <h1>Meal Plan Preferences</h1>
             {/* <h2>Meal per day</h2>
             {mealTypes.map((label, index) =>
             <button

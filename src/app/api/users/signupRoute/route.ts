@@ -12,8 +12,6 @@ export async function POST(request: NextRequest) {
         const reqBody = await request.json() //parses the incoming request body as JSON by calling request.text and then json.parse under the hood
         const {username, email, password} = reqBody //destructures the incoming request body to extract username, email, and password
 
-        console.log("Request Body:", reqBody);
-
         // Check if user already exists in the user model
         const user = await User.findOne({ email })
 
@@ -52,7 +50,6 @@ export async function POST(request: NextRequest) {
         })
 
         const savedUser = await newUser.save()
-        console.log("Saved User:", savedUser);
 
         //send verfication email
         await sendEmail({email, emailType: "VERIFY",

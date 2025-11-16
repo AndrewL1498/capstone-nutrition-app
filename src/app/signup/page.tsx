@@ -4,6 +4,7 @@ import React, {useEffect, useState} from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
+import "./signup.css";
 
 export default function SignUpPage() {
     const router = useRouter();
@@ -22,10 +23,8 @@ export default function SignUpPage() {
         try {
             setLoading(true); //Sets loading state to true when signup process starts
             const response = await axios.post("/api/users/signupRoute", user); //Axios is saying to pause and wait for the response from the server after making a POST request to the signupRoute API endpoint with the user data
-            console.log("Signup success", response.data);
             router.push("/login"); //After a successful signup, navigate to the login page
         } catch (error:any) { //Typescript type annotation specifying that error can be of any type
-            console.log("Signup failed", error.message);
             setErrorMessage(error.response?.data?.message || "An error occurred"); //Displays an error toast notification with the error message if signup fails
         }finally {
             setLoading(false); //Sets loading state to false when signup process ends regardless of success or failure
@@ -42,41 +41,61 @@ export default function SignUpPage() {
         }
     }, [user]); 
 
-    return <div className="flex flex-col items-center justify-center min-h-screen py-2">
-        <h1>{loading ? "Processing" : "Sign Up"}</h1> {/*If loading is true, show "Processing", otherwise show "Sign Up"*/}
+    return <div className="signup-page">
+        <h1>{loading ? "Processing" : "Sign Up"}</h1>
         <hr />
-        <label htmlFor="username">username</label>
-        <input
-            className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600"
-            id="username" 
-            type="text" 
-            value={user.username} 
-            onChange= {(e) => setUser({...user, username: e.target.value})}
+
+        <div className="form-group">
+            <label htmlFor="username">Username</label>
+            <input
+            id="username"
+            type="text"
+            value={user.username}
+            onChange={(e) => setUser({ ...user, username: e.target.value })}
             placeholder="username"
             />
-        <label htmlFor="email">email</label>
-        <input
-            className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600"
-            id="email" 
-            type="email" 
-            value={user.email} 
-            onChange= {(e) => setUser({...user, email: e.target.value})}
+        </div>
+
+        <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+            id="email"
+            type="email"
+            value={user.email}
+            onChange={(e) => setUser({ ...user, email: e.target.value })}
             placeholder="email"
             />
-        <label htmlFor="password">password</label>
-        <input
-            className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600"
-            id="password" 
-            type="password" 
-            value={user.password} 
-            onChange= {(e) => setUser({...user, password: e.target.value})}
+        </div>
+
+        <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+            id="password"
+            type="password"
+            value={user.password}
+            onChange={(e) => setUser({ ...user, password: e.target.value })}
             placeholder="password"
             />
-            <button
-            onClick={onSignup} //Calls the onSignup function when clicked
-            className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600"
-            >{buttonDisabled ? "No signup" : "Signup"}</button> {/* Renders a button with text based on buttonDisabled state */}
-            <Link href="/login">Visit login page</Link>
-            {errorMessage && <p className="text-green-600">{errorMessage}</p>}
         </div>
+
+        {/* BUTTON WRAPPER */}
+        <div className="form-group">
+            <button
+            onClick={onSignup}
+            className="signup-button"
+            disabled={buttonDisabled || loading}
+            >
+            {buttonDisabled ? "No signup" : "Signup"}
+            </button>
+        </div>
+
+        <div className ="login-link-wrapper">
+        <Link href="/login">Visit login page</Link>
+    </div>
+
+    <div>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
+    </div>
+</div>
+
 }

@@ -1,0 +1,86 @@
+/* ===========================
+   PROFILE PAGE STYLING
+   Matches your dark UI theme
+   =========================== */
+
+.profile-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;     /* ⬅ FULL vertical centering */
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: #161616;
+  color: #ffffff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center;          /* optional: centers text too */
+}
+
+
+/* Headings */
+.profile-page h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #ffffff;
+}
+
+.profile-page h2 {
+  font-size: 1.8rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  color: #ffffff;
+}
+
+/* Divider */
+.profile-divider {
+  width: 100%;
+  max-width: 400px;
+  border: 0.5px solid #444;
+  margin: 1rem 0;
+}
+
+/* Button Shared Style */
+.profile-btn {
+  width: 220px;
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #fff;
+  cursor: pointer;
+  background-color: #363636;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.profile-btn:hover {
+  background-color: #4a4a4a;
+  transform: translateY(-3px);
+}
+
+/* Accent Buttons (Logout / Nav Buttons) */
+.profile-btn.logout {
+  background-color: #c0392b;
+}
+
+.profile-btn.logout:hover {
+  background-color: #e74c3c;
+}
+
+.profile-btn.primary {
+  background-color: #e67e22;
+}
+
+.profile-btn.primary:hover {
+  background-color: #d35400;
+}
+
+/* Loading screen */
+.profile-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  min-height: 100vh;
+  font-size: 1.2rem;
+}

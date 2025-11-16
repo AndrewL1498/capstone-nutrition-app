@@ -135,7 +135,6 @@ if (plannerData.status !== "OK") {
           
 
           try {
-            console.log(`Fetching recipe for day, meal type: ${mealName}, recipeId:`, recipeId);
 
             const recipeResponse = await fetch( // Recipe API works best without Auth header because it's public data
               `https://api.edamam.com/api/recipes/v2/${recipeId}?type=public&app_id=${RECIPE_SEARCH_ID}&app_key=${RECIPE_SEARCH_KEY}`,
@@ -147,7 +146,6 @@ if (plannerData.status !== "OK") {
 
 
             const recipeData = await recipeResponse.json();
-            console.log(`Recipe data returned for ${mealName}, ID ${recipeId}:`, recipeData);
 
             if (!recipeData?.recipe) { // if recipeData or recipeData.recipe is null or undefined...
             console.warn(`Recipe data not found for recipeId ${recipeId}. Skipping...`); // then log a warning for missing recipe data...

@@ -80,7 +80,6 @@ export default function MealPlanPage() {
       if (!user) return;
 
       const { healthPrefs, calories, sections } = user.userDetails;
-      console.log("User Details:", user.userDetails);
 
       const breakfastRatio = 0.25;
       const lunchRatio = 0.35;
@@ -105,7 +104,6 @@ export default function MealPlanPage() {
       });
 
       setUser(prev => prev ? { ...prev, mealPlan: response.data.mealPlan } : prev); // If prev exists: spread all its properties and overwrite mealPlan. Otherwise, keep prev as is.
-      console.log('Meal plan generated:', response.data);
     } catch (err: any) {
       console.error("Failed to generate meal plan:", err);
     }

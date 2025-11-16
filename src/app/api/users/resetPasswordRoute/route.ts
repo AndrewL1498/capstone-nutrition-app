@@ -16,8 +16,6 @@ export async function POST(request: NextRequest){
             forgotPasswordTokenExpiry: {$gt: Date.now()}
         });
 
-        console.log("User found for password reset:", user);
-
         // Check if user with the token exists
         if(!user){
             return NextResponse.json({message: "Invalid or expired token"}, {status: 400})

@@ -10,7 +10,7 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <button onClick={() => router.push("/profile")}>Profile</button>
-      <button onClick={() => router.push("/userDetails")}>User Details</button>
+      <button onClick={() => router.push("/userDetails")}>Plan Preferences</button>
       <button onClick={() => router.push("/mealPlan")}>Meal Plan</button>
     </nav>
   );

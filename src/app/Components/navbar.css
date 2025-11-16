@@ -6,8 +6,6 @@
   padding: 1rem 0;
  /* Subtle dark background, slightly different from page */
   border-bottom: 1px solid #333; /* slight separation */
-  position: sticky;
-  top: 0;
   z-index: 100;
 }
 

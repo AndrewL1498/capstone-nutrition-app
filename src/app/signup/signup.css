@@ -1,0 +1,100 @@
+/* SIGNUP PAGE STYLING */
+/* Matches the dark theme and style of the login page */
+
+/* Page container */
+.signup-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center the whole form horizontally */
+  justify-content: center; /* center vertically */
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: #161616;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #ffffff;
+}
+
+/* Page heading */
+.signup-page h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #ffffff;
+}
+
+/* Wrap label + input in a container */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* label left-aligned above input */
+  margin-bottom: 1.25rem; /* space between groups */
+  width: 300px; /* match login page input width */
+}
+
+/* Labels */
+.form-group label {
+  margin-bottom: 0.5rem; /* space above input */
+  font-size: 1rem;
+}
+
+/* Inputs */
+.form-group input {
+  width: 100%; /* fill form-group width */
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #555;
+  background-color: #363636;
+  color: #ffffff;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #e67e22;
+}
+
+/* Signup button */
+.signup-button {
+  width: 100%; /* match input width */
+  padding: 0.6rem 1rem;
+ 
+  border: none;
+  border-radius: 6px;
+  background-color: #e67e22;
+  color: #fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.signup-button:hover {
+  background-color: #d35400;
+}
+
+.signup-button:disabled {
+  background-color: #717171;
+  cursor: not-allowed;
+}
+
+/* Independent wrapper for login link and error message */
+.login-link-wrapper {
+  display: flex;
+  justify-content: center; /* centers the link horizontally */
+  width: 100%;             /* take full width of parent */
+      /* spacing from signup button */
+}
+
+.login-link-wrapper a {
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.login-link-wrapper a:hover {
+  text-decoration: underline;
+}
+
+
+/* Error message styling */
+.error-message {
+  color: #e74c3c;
+  font-size: 0.9rem;
+  text-align: center;
+}

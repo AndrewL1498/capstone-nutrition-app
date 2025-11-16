@@ -109,9 +109,9 @@ export async function GET(req: Request) {
   }
 }
 
-4. Add Navbar
+4. Add Navbar ✅
 
-5. Go over meal plan page and meal details page code
+5. Go over meal plan page and meal details page code ✅
 
 6. See if anything can be done about meals not showing up
 
@@ -119,8 +119,10 @@ export async function GET(req: Request) {
 
 8. create universal error handling (possibly optional)
 
-9. set loading on user details and update front end
+9. set loading on user details and update front end ✅
 
 10. delete extra profile page
 
 11. update styling on profile page
+
+12. make loading screen look better when switching to the meal plan
