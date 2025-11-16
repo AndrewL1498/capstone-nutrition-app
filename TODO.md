@@ -121,8 +121,8 @@ export async function GET(req: Request) {
 
 9. set loading on user details and update front end ✅
 
-10. delete extra profile page
+10. delete extra profile page ✅
 
-11. update styling on profile page
+11. update styling on profile page ✅
 
 12. make loading screen look better when switching to the meal plan
