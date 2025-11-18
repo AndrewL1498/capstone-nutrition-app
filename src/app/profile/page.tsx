@@ -40,8 +40,15 @@ export default function ProfilePage() {
     }
   };
 
-  const userDetailsPage = () => router.push(`/userDetails`);
-  const mealPlanPage = () => router.push(`/mealPlan`);
+  const deleteProfile = async () => {
+    try {
+      await axios.delete("/api/users/deleteProfile");
+      toast.success("Profile deleted successfully");
+      router.push("/signup")
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  }
 
   // Render loading screen while fetching username
   if (loading) {
@@ -59,10 +66,6 @@ export default function ProfilePage() {
 
       <h2>Hi {data}!</h2>
 
-      <button className="profile-btn logout" onClick={logout}>
-        Logout
-      </button>
-
       <button
         className="profile-btn primary"
         onClick={() => router.push("/userDetails")}
@@ -75,6 +78,18 @@ export default function ProfilePage() {
         onClick={() => router.push("/mealPlan")}
       >
         Go to Meal Plan
+      </button>
+
+
+      <button className="profile-btn logout" onClick={logout}>
+        Logout
+      </button>
+
+      <button
+        className="profile-btn delete"
+        onClick={deleteProfile}
+      >
+        Delete Profile
       </button>
     </div>
   );

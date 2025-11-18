@@ -3,7 +3,6 @@
 import React, {useEffect, useState} from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import User from "@/models/userModel";
 import { connect } from "@/dbConfig/dbConfig";
 import { healthLabels, allergyLabels, cuisineTypes, dishTypes, mealTypes } from "@/foodCategories/foodCategories"; 
 import toast from "react-hot-toast";

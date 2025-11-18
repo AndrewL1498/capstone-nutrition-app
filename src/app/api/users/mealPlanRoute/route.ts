@@ -132,6 +132,12 @@ if (plannerData.status !== "OK") {
             continue; // skip to the next iteration of the for loop instead of executing the rest of the code in this loop
           }
 
+
+          console.log("=== Recipe API Request ===");
+          console.log("Recipe ID:", recipeId);
+          console.log("Request URL:", `https://api.edamam.com/api/recipes/v2/${recipeId}?type=public&app_id=${RECIPE_SEARCH_ID}&app_key=${RECIPE_SEARCH_KEY}`);
+          console.log("Request Headers:", { accept: "application/json" });
+
           
 
           try {
@@ -144,8 +150,10 @@ if (plannerData.status !== "OK") {
               }
             );
 
-
             const recipeData = await recipeResponse.json();
+
+            // console.log("=== Recipe API Response ===");
+            // console.log(recipeData);
 
             if (!recipeData?.recipe) { // if recipeData or recipeData.recipe is null or undefined...
             console.warn(`Recipe data not found for recipeId ${recipeId}. Skipping...`); // then log a warning for missing recipe data...

@@ -74,6 +74,13 @@
 .profile-btn.primary:hover {
   background-color: #d35400;
 }
+.profile-btn.delete {
+  background-color: #5e0900;
+}
+
+.profile-btn.delete:hover {
+  background-color: #960a00;
+}
 
 /* Loading screen */
 .profile-loading {
