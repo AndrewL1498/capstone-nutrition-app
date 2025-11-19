@@ -9,9 +9,6 @@ connect(); // Ensure DB connection is established
 const MEAL_PLANNER_APP_ID = process.env.MEAL_PLANNER_APP_ID; // e.g. c4cf182d
 const MEAL_PLANNER_APP_KEY = process.env.MEAL_PLANNER_APP_KEY; // your secret key
 
-const RECIPE_SEARCH_ID = process.env.RECIPE_SEARCH_ID;
-const RECIPE_SEARCH_KEY = process.env.RECIPE_SEARCH_KEY;
-
 export async function POST(req: NextRequest) {
   try {
     const userId = await getDataFromToken(req);
@@ -131,22 +128,20 @@ if (plannerData.status !== "OK") {
             enhancedSections[mealName] = { assigned: recipeUri }; //If key is a variable you have to use bracket notation to set the value. This runs for every loop if there is no recipeId
             continue; // skip to the next iteration of the for loop instead of executing the rest of the code in this loop
           }
-
-
-          console.log("=== Recipe API Request ===");
-          console.log("Recipe ID:", recipeId);
-          console.log("Request URL:", `https://api.edamam.com/api/recipes/v2/${recipeId}?type=public&app_id=${RECIPE_SEARCH_ID}&app_key=${RECIPE_SEARCH_KEY}`);
-          console.log("Request Headers:", { accept: "application/json" });
-
-          
+     
 
           try {
 
             const recipeResponse = await fetch( // Recipe API works best without Auth header because it's public data
-              `https://api.edamam.com/api/recipes/v2/${recipeId}?type=public&app_id=${RECIPE_SEARCH_ID}&app_key=${RECIPE_SEARCH_KEY}`,
+              `https://api.edamam.com/api/recipes/v2/${recipeId}?type=public&app_id=${MEAL_PLANNER_APP_ID}&app_key=${MEAL_PLANNER_APP_KEY}`,
               { 
                 method: "GET",
-                headers: { accept: "application/json" }
+        headers: {
+          "accept": "application/json",
+          "Authorization": mealPlannerAuth,
+          "Edamam-Account-User": accountUser,
+        }
+                
               }
             );
 

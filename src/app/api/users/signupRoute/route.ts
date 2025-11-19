@@ -3,14 +3,14 @@ import User from "@/models/userModel";
 import {NextRequest, NextResponse} from "next/server";
 import bcrypt from "bcryptjs";
 import { sendEmail } from "@/helpers/mailer"
- 
 
-connect() //Establishes a connection to the database using the connect function from dbConfig
 
 export async function POST(request: NextRequest) {
     try {
+        await connect() //Establishes a connection to the database using the connect function from dbConfig
         const reqBody = await request.json() //parses the incoming request body as JSON by calling request.text and then json.parse under the hood
         const {username, email, password} = reqBody //destructures the incoming request body to extract username, email, and password
+console.log("REQ BODY:", reqBody);
 
         // Check if user already exists in the user model
         const user = await User.findOne({ email })
