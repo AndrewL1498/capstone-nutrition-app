@@ -12,7 +12,7 @@ const MEAL_PLANNER_APP_KEY = process.env.MEAL_PLANNER_APP_KEY; // your secret ke
 export async function POST(req: NextRequest) {
   try {
     const userId = await getDataFromToken(req);
-    const accountUser = userId; // fallback to default
+    const accountUser = "user123"; //hardcoding this username is because I hit the 10 monthly user limit and need a user that will work. Every user will get their own unique plan in the database, but all the api calls from each user of my app will be going through one user account on the edamam platform, possibly causing api limits to be hit much quicker. After a month, I can add 10 more users, so I won't need this anymore
     const {
           healthPrefs,
           calories,
@@ -138,7 +138,6 @@ if (plannerData.status !== "OK") {
                 method: "GET",
         headers: {
           "accept": "application/json",
-          "Authorization": mealPlannerAuth,
           "Edamam-Account-User": accountUser,
         }
                 

@@ -15,8 +15,10 @@ export async function POST(request: NextRequest) {
         const reqBody = await request.json()
         const {email, password} = reqBody;
 
+        const normalizedEmail = email.toLowerCase();
+
         // Check if user exists
-        const user = await User.findOne({email})
+        const user = await User.findOne({email: normalizedEmail})
         if(!user) {
             return NextResponse.json({message: "User not found"}, {status: 400})
         }
@@ -35,7 +37,7 @@ export async function POST(request: NextRequest) {
         };
 
         //create token
-        const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET!, {expiresIn: '1d'}); // '!' asserts that TOKEN_SECRET is not undefined. Takes 3 arguments: payload, secret, options
+        const token = jwt.sign(tokenData, process.env.TOKEN_SECRET!, {expiresIn: '1d'}); // '!' asserts that TOKEN_SECRET is not undefined. Takes 3 arguments: payload, secret, options
         const response = NextResponse.json({
             message: "Login successful",
             success: true // indicates that the login was successful and sends a 200 status code by default. This is useful for the client to know that the request was processed successfully. It's not understood by browsers but can be used by client-side code to handle responses appropriately.

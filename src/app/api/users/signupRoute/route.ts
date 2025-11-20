@@ -10,10 +10,11 @@ export async function POST(request: NextRequest) {
         await connect() //Establishes a connection to the database using the connect function from dbConfig
         const reqBody = await request.json() //parses the incoming request body as JSON by calling request.text and then json.parse under the hood
         const {username, email, password} = reqBody //destructures the incoming request body to extract username, email, and password
-console.log("REQ BODY:", reqBody);
+
+        const normalizedEmail = email.toLowerCase(); //converts email to lowercase
 
         // Check if user already exists in the user model
-        const user = await User.findOne({ email })
+        const user = await User.findOne({ email: normalizedEmail })
 
         if (user) {
             return NextResponse.json({ message: "User already exists" }, { status: 400 })
@@ -45,7 +46,7 @@ console.log("REQ BODY:", reqBody);
         // Create new user
         const newUser = new User({
             username,
-            email,
+            email: normalizedEmail,
             password: hashedPassword
         })
 

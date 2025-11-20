@@ -11,7 +11,7 @@ beforeAll(async() =>{
 });
 
 afterAll(async () => {
-    await mongoose.connection.collection('users_test').deleteMany({});
+    await mongoose.connection.collection('users').deleteMany({});
     await mongoose.connection.close();
 })
 
@@ -35,11 +35,11 @@ describe("Signup successful", () => {
         console.log(req.body)
 
         const data = await res.json();
-        console.log(data)
+        console.log("user data:", data)
 
         expect(res.status).toBe(200);
         expect(data.message).toBe("User created successfully");
-        expect(data.user).toHaveProperty("email", validUser.email);
-        expect(data.user).toHaveProperty("username", validUser.username);
+        expect(data.savedUser).toHaveProperty("email", validUser.email);
+        expect(data.savedUser).toHaveProperty("username", validUser.username);
     })
 });
