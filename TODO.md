@@ -126,3 +126,5 @@ export async function GET(req: Request) {
 11. update styling on profile page ✅
 
 12. make loading screen look better when switching to the meal plan
+
+13. Right now, if the user's email is created with a capital letter, and you try to sign in with a lowercase email, it doesn't work and gives a 400 error. Change this to allow either capital or lowercase letters

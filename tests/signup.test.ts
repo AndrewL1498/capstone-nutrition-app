@@ -4,7 +4,6 @@ import { NextRequest } from "next/server";
 import { connect } from "@/dbConfig/dbConfig";
 import mongoose from "mongoose";
 
-// process.env.NODE_ENV = "test";
 dotenv.config();
 
 beforeAll(async() =>{
