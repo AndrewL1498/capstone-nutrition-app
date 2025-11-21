@@ -12,7 +12,7 @@ export default function LoginPage() {
   const [loading, setLoading] = React.useState(false);
   const [buttonDisabled, setButtonDisabled] = React.useState(true);
 
-  const onLogin = async (event?: React.FormEvent<HTMLFormElement>) => { // form submission creates an event. Event is optional in case onLogin is called without an event. React.FormEvent<HTMLFormElement> ensures correct typing for TypeScript
+  const onLogin = async (event: React.FormEvent<HTMLFormElement>) => { // form submission creates an event. React.FormEvent<HTMLFormElement> ensures correct typing for TypeScript
     if (event) event.preventDefault(); // prevent default form submission which is a page reload
     try {
       setLoading(true);
@@ -20,7 +20,14 @@ export default function LoginPage() {
       toast.success("Login successful");
       router.push("/profile");
     } catch (error: any) {
-      toast.error(error.message);
+
+        const serverMessage =
+        error?.response?.data?.message ||
+        error?.response?.data?.error ||
+        error?.message
+
+        toast.error(serverMessage);
+
     } finally {
       setLoading(false);
     }

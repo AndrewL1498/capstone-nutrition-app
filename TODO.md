@@ -113,7 +113,7 @@ export async function GET(req: Request) {
 
 5. Go over meal plan page and meal details page code ✅
 
-6. See if anything can be done about meals not showing up
+6. See if anything can be done about meals not showing up ✅
 
 7. see if you can get a more accurate calorie count/estimate on meals and add the servings to the meals ✅
 
@@ -131,7 +131,7 @@ export async function GET(req: Request) {
 
 14. Now that the user email is being stored as lowercase regardless of capitilization, now the login needs to still work if the user capitilizes their email on login ✅
 
-15. If password is incorrect on login, toast is displaying a 400 error as opposed to a telling the user that their password is wrong. Fix this
+15. If password is incorrect on login, toast is displaying a 400 error as opposed to a telling the user that their password is wrong. Fix this ✅
 
 16. When the 400 error is removed from the !validPassword like this: 
-if(!validPassword) { return NextResponse.json({message: "Invalid password"})} then toast says "login successful" and never redirects. Make it say "invalid password"
+if(!validPassword) { return NextResponse.json({message: "Invalid password"})} then toast says "login successful" and never redirects. Make it say "invalid password" ✅
