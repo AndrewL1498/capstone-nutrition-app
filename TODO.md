@@ -135,3 +135,7 @@ export async function GET(req: Request) {
 
 16. When the 400 error is removed from the !validPassword like this: 
 if(!validPassword) { return NextResponse.json({message: "Invalid password"})} then toast says "login successful" and never redirects. Make it say "invalid password" ✅
+
+17. right now login shows toast errors and signup has an error message on screen. This is inconsistent. Update them to be the same (optional)
+
+18. Right now emails like @.com can work, or @.commm. If you wanna get stricter with this you can, however if you ever use this app you will most likely have email verification, so this isn't necessary (optional)
