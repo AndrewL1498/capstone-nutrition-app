@@ -6,31 +6,38 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
 dotenv.config();
- 
 
-connect()
+connect();
 
 export async function POST(request: NextRequest) {
+
     try{
         const reqBody = await request.json()
         const {email, password} = reqBody;
 
         const normalizedEmail = email.toLowerCase();
 
+        if(normalizedEmail.length === 0) {
+            return NextResponse.json({message: "Please enter your email address"}, {status: 400})
+        };
+
+        if(password.length === 0) {
+            return NextResponse.json({message: "Please enter your password"}, {status: 400})
+        };
+
         // Check if user exists
-        const user = await User.findOne({email: normalizedEmail})
-        
-        
+        const user = await User.findOne({email: normalizedEmail});
+
         if(!user) {
             return NextResponse.json({message: "User not found"}, {status: 400})
-        }
+        };
         // Check if password is correct
         const validPassword = await bcrypt.compare(password, user.password);
         
 
         if(!validPassword) {
             return NextResponse.json({message: "Invalid password"}, {status: 400})
-        }
+        };
         
         //create token data
         const tokenData = {

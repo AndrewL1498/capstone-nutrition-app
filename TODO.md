@@ -139,3 +139,7 @@ if(!validPassword) { return NextResponse.json({message: "Invalid password"})} th
 17. right now login shows toast errors and signup has an error message on screen. This is inconsistent. Update them to be the same (optional)
 
 18. Right now emails like @.com can work, or @.commm. If you wanna get stricter with this you can, however if you ever use this app you will most likely have email verification, so this isn't necessary (optional)
+
+19. if this app ever goes to production, add required email verification to the loginRoute (optional)
+
+20. There is some kind of issue on the invalid password check on the login test that sometimes passes and sometimes doesn't, and the only way to consistently get it to pass is is I comment out the connect function while testing. Be sure to comment this back in when testing is over

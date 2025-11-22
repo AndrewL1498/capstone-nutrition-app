@@ -16,12 +16,12 @@ beforeEach(async () => {
     await mongoose.connection.collection('users').deleteMany({});
 })
 afterAll(async () => {
-    await mongoose.connection.collection('users').deleteMany({});
+    await mongoose.connection.collection('users').deleteMany({}); //I have a deleteMany here as well as the beforeEach so that way when all the tests are done the database gets cleared and doesn't leave anything behind the next time the tests are run
     await mongoose.connection.close();
 })
 
 const mockRequest = (body: any) => {
-    return new NextRequest("http://localhost/api/signup",{
+    return new NextRequest("http://localhost/api/signupRoute",{ //The url (http://localhost/api/signupRoute) doesn't matter for my tests, as long as something is there
         method: "POST",
                 headers: {
             "Content-Type": "application/json"
@@ -49,7 +49,7 @@ describe("Signup successful", () => {
 
         const userInDb = await User.findOne({ email: "andrew@test.com" });
         expect(userInDb).not.toBeNull();
-        expect(userInDb!.username).toBe(validUser.username);
+        expect(userInDb!.username).toBe(validUser.username); //Typescript will think userInDb might be null. The exclamation point is saying "I'm confident that it is not null here"
         expect(userInDb!.email).toBe(validUser.email.toLowerCase());
 
 
