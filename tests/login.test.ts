@@ -1,3 +1,6 @@
+///Run "npx jest --runInBand" or else "login successful" and "invalid password" tests (and maybe even other tests) will sometimes fail
+
+
 import dotenv from 'dotenv';
 import { POST as loginHandler } from "@/app/api/users/loginRoute/route";
 import { NextRequest } from "next/server";
