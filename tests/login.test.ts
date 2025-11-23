@@ -121,13 +121,13 @@ describe("Login tests", () =>{
         expect(data.message).toBe("Invalid password");
     });
 
-    // test("Login sets token cookie", async () => {
-    //     const user = {email: "andrewtwo@test.com", password: "Password123!"};
-    //     const req = mockRequest(user);
-    //     const res = await loginHandler(req);
-    //     console.log(res)
-    //     const tokenCookie = res.cookies.get("token");
-    //     expect(tokenCookie).toBeDefined();
-    //     expect(tokenCookie?.httpOnly).toBe(true);
-    //     });
+    test("Login sets token cookie", async () => {
+        const user = {email: "andrewtwo@test.com", password: "Password123!"};
+        const req = mockRequest(user);
+        const res = await loginHandler(req);
+        console.log(res)
+        const tokenCookie = res.cookies.get("token");
+        expect(tokenCookie).toBeDefined();
+        expect(tokenCookie?.httpOnly).toBe(true);
+        });
 })
