@@ -35,7 +35,7 @@ afterAll(async () => {
 })
 
 function mockAuthRequest(body: any, userId: string) {
-    const token = jwt.sign({ id: userId }, process.env.JWT_SECRET!, {
+    const token = jwt.sign({ id: userId }, process.env.TOKEN_SECRET!, {
         expiresIn: "1h"
     });
 
@@ -55,9 +55,57 @@ function mockAuthRequest(body: any, userId: string) {
 
 describe("Authorization/Authentication tests", () =>{
 test("valid token allows request", async () => {
-    const user = {username: "andrewthree", email: "andrewthree@test.com"}
+    const dbUser = await User.findOne({ email: "andrewthree@test.com"});
+    expect(dbUser).toBeDefined();
 
-    const req = mockAuthRequest(user);
+    const body = {
+        healthPrefs: ["alcohol-free"],
+        calories: { min: 1000, max: 2000 },
+        sections: {
+            Breakfast: {dishes: ["biscuits and cookies"], meals: ["breakfast"] },
+            Lunch: {dishes: ["biscuits and cookies"], meals: ["lunch/dinner"] },
+            Dinner: {dishes: ["biscuits and cookies"], meals: ["lunch/dinner"] },
+        },
+        breakfastMin: 300,
+        breakfastMax: 500,
+        lunchMin: 400,
+        lunchMax: 700,
+        dinnerMin: 500,
+        dinnerMax: 800,
+    };
+
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+            status:"OK",
+            selection: [
+                {
+                    sections: {
+                        Breakfast: { assigned: "http://fake.recipe#recipe_1"},
+                        Lunch: { assigned: "http://fake.recipe#recipe_2"},
+                        Dinner: { assigned: "http://fake.recipe#recipe_3"},
+                    },
+                },
+            ],
+        }),
+    });
+
+    const req = mockAuthRequest(body, dbUser!._id.toString());
+
+    const res = await mealPlanHandler(req);
+
+    const data = await res.json();
+
+        // 7️⃣ Assertions
+    expect(res.status).toBe(200);
+    expect(data.success).toBe(true);
+    expect(data.mealPlan).toBeDefined();
+    expect(data.mealPlan.length).toBe(1); // one day returned
+
+    // 8️⃣ Optional: verify DB update
+    const updatedUser = await User.findById(dbUser!._id);
+    expect(updatedUser?.mealPlan).toBeDefined();
+    expect(updatedUser?.mealPlan.length).toBe(1);
 
     });
 });

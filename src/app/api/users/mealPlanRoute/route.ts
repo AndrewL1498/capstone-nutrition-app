@@ -136,10 +136,10 @@ if (plannerData.status !== "OK") {
               `https://api.edamam.com/api/recipes/v2/${recipeId}?type=public&app_id=${MEAL_PLANNER_APP_ID}&app_key=${MEAL_PLANNER_APP_KEY}`,
               { 
                 method: "GET",
-        headers: {
-          "accept": "application/json",
-          "Edamam-Account-User": accountUser,
-        }
+                headers: {
+                "accept": "application/json",
+                "Edamam-Account-User": accountUser,
+              }
                 
               }
             );
@@ -186,7 +186,6 @@ if (plannerData.status !== "OK") {
               enhancedSections[mealName] = { assigned: recipeUri };
             }
           } catch (err) {
-            console.error("Error fetching recipe details:", err);
             enhancedSections[mealName] = { assigned: recipeUri, error: "Usage Limits Exceeded" };
           }
         }
