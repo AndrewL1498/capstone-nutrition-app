@@ -13,19 +13,87 @@ import jwt from "jsonwebtoken";
 dotenv.config();
 beforeAll(async () => {
     await connect();
-
     global.fetch = jest.fn();
 });
 
-beforeEach(async () =>{
+let mockMealPlanBody: any; //a rusable variable that can be used across all tests
+
+const fakeRecipe = (label: string, calories: number) => ({
+    ok: true,
+    json: async () => ({
+        recipe: {
+            label,
+            image: `http://image.com/${label.toLowerCase()}.jpg`,
+            url: `http://recipe.com/${label.toLowerCase()}`,
+            calories,
+            yield: 1,
+            totalNutrients: {},
+            ingredientLines: ["placeholder"],
+            cuisineType: ["American"],
+        },
+    }),
+});
+
+beforeEach(async () => {
+    // Reset users
     await mongoose.connection.collection("users").deleteMany({});
 
-        await User.create({
+    //Creates new user in the database
+    const user = await User.create({
         username: "Andrewthree",
         email: "andrewthree@test.com",
         password: await bcrypt.hash("Password123!", 10),
     });
-})
+
+    // Store reusable body (same for every test)
+    mockMealPlanBody = {
+        healthPrefs: ["alcohol-free"],
+        calories: { min: 1000, max: 2000 },
+        sections: {
+            Breakfast: { dishes: ["biscuits and cookies"], meals: ["breakfast"] },
+            Lunch: { dishes: ["biscuits and cookies"], meals: ["lunch/dinner"] },
+            Dinner: { dishes: ["biscuits and cookies"], meals: ["lunch/dinner"] },
+        },
+        breakfastMin: 300,
+        breakfastMax: 500,
+        lunchMin: 400,
+        lunchMax: 700,
+        dinnerMin: 500,
+        dinnerMax: 800,
+    };
+
+    // Reset fetch each test
+    (global.fetch as jest.Mock).mockReset();
+
+    // 1️⃣ Meal planner API. When you call global.fetch as jest.Mock, you overwrite the global fetch function, meaning anytime fetch is called in the route, it gets overwritten by the mock fetch calls. The order of mocked fetch calls must match the order the fetch calls are made in the route
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ //this is like calling "const plannerData = await mealPlannerResponse.json();" in my route. .json is an async function that reads the response body sent by the API and parses it into a javascript object
+            status: "OK",
+            selection: [
+                {
+                    sections: {
+                        Breakfast: { assigned: "http://fake.recipe#recipe_1" },
+                        Lunch: { assigned: "http://fake.recipe#recipe_2" },
+                        Dinner: { assigned: "http://fake.recipe#recipe_3" },
+                    },
+                },
+            ],
+        }),
+    });
+
+    //Calling fakeRecipe multiple times here creates 3 different fakeRecipes in memory. If I choose to access them later, I need to store them each in their own variable
+    // 2️⃣ Recipe details: Breakfast
+    (global.fetch as jest.Mock).mockResolvedValueOnce(fakeRecipe("Breakfast", 300));
+
+    // 3️⃣ Recipe details: Lunch
+    (global.fetch as jest.Mock).mockResolvedValueOnce(fakeRecipe("Lunch", 500));
+
+    // 4️⃣ Recipe details: Dinner
+    (global.fetch as jest.Mock).mockResolvedValueOnce(fakeRecipe("Dinner", 600));
+
+});
+
 
 afterAll(async () => {
     await mongoose.connection.collection('users').deleteMany({}); //I have a deleteMany here as well as the beforeEach so that way when all the tests are done the database gets cleared and doesn't leave anything behind the next time the tests are run
@@ -58,39 +126,7 @@ test("valid token allows request", async () => {
     const dbUser = await User.findOne({ email: "andrewthree@test.com"});
     expect(dbUser).toBeDefined();
 
-    const body = {
-        healthPrefs: ["alcohol-free"],
-        calories: { min: 1000, max: 2000 },
-        sections: {
-            Breakfast: {dishes: ["biscuits and cookies"], meals: ["breakfast"] },
-            Lunch: {dishes: ["biscuits and cookies"], meals: ["lunch/dinner"] },
-            Dinner: {dishes: ["biscuits and cookies"], meals: ["lunch/dinner"] },
-        },
-        breakfastMin: 300,
-        breakfastMax: 500,
-        lunchMin: 400,
-        lunchMax: 700,
-        dinnerMin: 500,
-        dinnerMax: 800,
-    };
-
-    (global.fetch as jest.Mock).mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-            status:"OK",
-            selection: [
-                {
-                    sections: {
-                        Breakfast: { assigned: "http://fake.recipe#recipe_1"},
-                        Lunch: { assigned: "http://fake.recipe#recipe_2"},
-                        Dinner: { assigned: "http://fake.recipe#recipe_3"},
-                    },
-                },
-            ],
-        }),
-    });
-
-    const req = mockAuthRequest(body, dbUser!._id.toString());
+    const req = mockAuthRequest(mockMealPlanBody, dbUser!._id.toString());
 
     const res = await mealPlanHandler(req);
 
@@ -100,10 +136,10 @@ test("valid token allows request", async () => {
     expect(res.status).toBe(200);
     expect(data.success).toBe(true);
     expect(data.mealPlan).toBeDefined();
-    expect(data.mealPlan.length).toBe(1); // one day returned
+    expect(data.mealPlan.length).toBe(1); // one day returned. If I test multiple days in the future, I'll have to expand my mocks accordingly
 
     // 8️⃣ Optional: verify DB update
-    const updatedUser = await User.findById(dbUser!._id);
+    const updatedUser = await User.findById(dbUser!._id); // exclamation point is assuring typscript that dbUser exists
     expect(updatedUser?.mealPlan).toBeDefined();
     expect(updatedUser?.mealPlan.length).toBe(1);
 
