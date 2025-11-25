@@ -17,6 +17,7 @@ beforeAll(async () => {
 });
 
 let mockMealPlanBody: any; //a rusable variable that can be used across all tests
+let dbUser: any
 
 const fakeRecipe = (label: string, calories: number) => ({
     ok: true,
@@ -39,7 +40,7 @@ beforeEach(async () => {
     await mongoose.connection.collection("users").deleteMany({});
 
     //Creates new user in the database
-    const user = await User.create({
+        dbUser = await User.create({
         username: "Andrewthree",
         email: "andrewthree@test.com",
         password: await bcrypt.hash("Password123!", 10),
@@ -122,28 +123,117 @@ function mockAuthRequest(body: any, userId: string) {
 }
 
 describe("Authorization/Authentication tests", () =>{
-test("valid token allows request", async () => {
-    const dbUser = await User.findOne({ email: "andrewthree@test.com"});
-    expect(dbUser).toBeDefined();
+    test("valid token allows request", async () => {
+    
+        const req = mockAuthRequest(mockMealPlanBody, dbUser!._id.toString());
 
-    const req = mockAuthRequest(mockMealPlanBody, dbUser!._id.toString());
+        const res = await mealPlanHandler(req);
 
-    const res = await mealPlanHandler(req);
+        const data = await res.json();
 
-    const data = await res.json();
+            // 7️⃣ Assertions
+        expect(res.status).toBe(200);
+        expect(data.success).toBe(true);
+        expect(data.mealPlan).toBeDefined();
+        expect(data.mealPlan.length).toBe(1); // one day returned. If I test multiple days in the future, I'll have to expand my mocks accordingly
 
-        // 7️⃣ Assertions
-    expect(res.status).toBe(200);
-    expect(data.success).toBe(true);
-    expect(data.mealPlan).toBeDefined();
-    expect(data.mealPlan.length).toBe(1); // one day returned. If I test multiple days in the future, I'll have to expand my mocks accordingly
+        // 8️⃣ Optional: verify DB update
+        const updatedUser = await User.findById(dbUser!._id); // exclamation point is assuring typscript that dbUser exists
+        expect(updatedUser?.mealPlan).toBeDefined();
+        expect(updatedUser?.mealPlan.length).toBe(1);
 
-    // 8️⃣ Optional: verify DB update
-    const updatedUser = await User.findById(dbUser!._id); // exclamation point is assuring typscript that dbUser exists
-    expect(updatedUser?.mealPlan).toBeDefined();
-    expect(updatedUser?.mealPlan.length).toBe(1);
+        });
+        
+    test("Missing token", async () => {
+
+        const req = new NextRequest("http://localhost/api/mealPlanRoute", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(mockMealPlanBody),
+        });
+
+        const res = await mealPlanHandler(req);
+
+        const data = await res.json();
+        console.log("data message:", data.message);
+
+            // 7️⃣ Assertions
+        expect(res.status).toBe(401);
+        expect(data.success).toBe(false);
+        expect(data.message).toMatch("token error");
+        });
+
+    test("Invalid/Expired token", async () => {
+
+        function mockAuthRequestExpiredToken(body: any, userId: string) {
+            const token = jwt.sign({ id: userId }, process.env.TOKEN_SECRET!, {
+                expiresIn: "1ms"
+            });
+
+        const req = new NextRequest("http://localhost/api/mealPlanRoute", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body),
+        });
+
+        // Patch req.cookies (NextRequest strips cookie header inside tests)
+        req.cookies.set("token", token);
+
+        return req;
+};
+
+        const req = mockAuthRequestExpiredToken(mockMealPlanBody, dbUser!._id.toString())
+
+        const res = await mealPlanHandler(req);
+
+        const data = await res.json();
+        console.log("data message:", data.message);
+
+            // 7️⃣ Assertions
+        expect(res.status).toBe(401);
+        expect(data.success).toBe(false);
+        expect(data.message).toMatch("token error");
+        });
+
+
+describe("Input validation tests", () => {
+    test("Missing fields in the body should return an error", async () =>{
+
+        const body = {
+        healthPrefs: ["alcohol-free"],
+        calories: { min: 1000, max: 2000 },
+        sections: {
+            Breakfast: { dishes: [], meals: ["breakfast"] },
+            Lunch: { dishes: [], meals: ["lunch/dinner"] },
+            Dinner: { dishes: [], meals: ["lunch/dinner"] },
+        },
+        breakfastMin: 300,
+        breakfastMax: 500,
+        lunchMin: 400,
+        lunchMax: 700,
+        dinnerMin: 500,
+        dinnerMax: 800,
+    };
+
+       const req = mockAuthRequest(body, dbUser._id.toString());
+
+       const res = await mealPlanHandler(req);
+       console.log("response:", res)
+
+       const data = await res.json();
+
+       expect(res.status).toBe(502);
+       expect(data.success).toBe(false);
+       expect(data.message).toBe("Api error occurred while fetching meal plan.")
 
     });
+});
+
+
 });
 
 ////Tests////

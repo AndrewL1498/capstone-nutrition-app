@@ -103,9 +103,9 @@ export async function POST(req: NextRequest) {
 
 // ✅ 1. Handle network or HTTP-level errors
 if (!mealPlannerResponse.ok) {
-  console.error("Edamam API network error:", plannerData);
   return NextResponse.json(
     { success: false, message: "Api error occurred while fetching meal plan." },
+    { status: 502}
   );
 }
 
@@ -113,6 +113,7 @@ if (!mealPlannerResponse.ok) {
 if (plannerData.status !== "OK") {
   return NextResponse.json(
     { success: false, message: "No matching recipes found for your preferences. Please try again." },
+    { status: 400 }
   );
 }
 
@@ -217,7 +218,19 @@ return NextResponse.json({
   mealPlan: enhancedMealPlan,
 });
 } catch (error: any) {
-  console.error("Meal plan API error:", error);
+
+  //if getDataFromToken sends an error message, this is how to handle it
+  if (
+    error.message === "jwt must be provided" ||
+    error.message === "jwt expired" ||
+    error.message === "invalid token"
+  ) {
+    return NextResponse.json(
+      { success: false, message: "token error" },
+      { status: 401 }
+    );
+  }
+
   return NextResponse.json(
     { success: false, message: "Server error while generating meal plan." },
     { status: 500 }
