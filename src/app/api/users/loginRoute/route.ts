@@ -3,13 +3,12 @@ import User from "@/models/userModel";
 import {NextRequest, NextResponse} from "next/server";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
 
-dotenv.config();
 
-connect();
 
 export async function POST(request: NextRequest) {
+    
+    connect();
 
     try{
         const reqBody = await request.json()

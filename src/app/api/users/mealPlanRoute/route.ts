@@ -78,6 +78,8 @@ export async function POST(req: NextRequest) {
       },
     };
 
+    console.log("Body:", body)
+
     // ✅ Build Basic Auth header
     const mealPlannerAuth = `Basic ${Buffer.from(
       `${MEAL_PLANNER_APP_ID}:${MEAL_PLANNER_APP_KEY}`
@@ -151,7 +153,6 @@ if (plannerData.status !== "OK") {
             // console.log(recipeData);
 
             if (!recipeData?.recipe) { // if recipeData or recipeData.recipe is null or undefined...
-            console.warn(`Recipe data not found for recipeId ${recipeId}. Skipping...`); // then log a warning for missing recipe data...
             enhancedSections[mealName] = { assigned: recipeUri }; // then set the assigned URI only...
             continue; // And skip to the next iteration of the for loop
 }
