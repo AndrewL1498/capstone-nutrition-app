@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
+    "target": "ES2020",
     "lib": [
       "dom",
       "dom.iterable",
@@ -17,16 +17,16 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
     "paths": {
       "@/*": [
         "./src/*"
       ]
-    }
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
     "next-env.d.ts",
@@ -34,10 +34,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "tests/**/*.ts",
-    "tests/**/*.tsx",
-    "generateSecret.mjs",
-    "src/models/mealDetailsSchema.js",
-    "src/scripts/updateUsersWithNewFields.js"
+    "tests/**/*.tsx"
   ],
   "exclude": [
     "node_modules"
