@@ -65,34 +65,36 @@ describe("MealPlanPage", () => {
     });
   });
 
-  test("generates meal plan on button click", async () => {
-    const mockMealPlan = [
-      {
-        sections: {
-          Breakfast: { label: "Oatmeal", totalCalories: 200, caloriesPerServing: 200, assigned: "Breakfast", cuisineType: ["American"] },
-          Lunch: { label: "Salad", totalCalories: 400, caloriesPerServing: 400, assigned: "Lunch", cuisineType: ["Mediterranean"] },
-          Dinner: { label: "Stir Fry", totalCalories: 600, caloriesPerServing: 600, assigned: "Dinner", cuisineType: ["Asian"] },
-        },
-      },
-    ];
+  //This test is commented out because the generate button is currently commented out in the main component
 
-    mockedAxios.post.mockResolvedValueOnce({ data: { mealPlan: mockMealPlan } });
+  // test("generates meal plan on button click", async () => {
+  //   const mockMealPlan = [
+  //     {
+  //       sections: {
+  //         Breakfast: { label: "Oatmeal", totalCalories: 200, caloriesPerServing: 200, assigned: "Breakfast", cuisineType: ["American"] },
+  //         Lunch: { label: "Salad", totalCalories: 400, caloriesPerServing: 400, assigned: "Lunch", cuisineType: ["Mediterranean"] },
+  //         Dinner: { label: "Stir Fry", totalCalories: 600, caloriesPerServing: 600, assigned: "Dinner", cuisineType: ["Asian"] },
+  //       },
+  //     },
+  //   ];
 
-    render(<MealPlanPage />);
+  //   mockedAxios.post.mockResolvedValueOnce({ data: { mealPlan: mockMealPlan } });
 
-    await waitFor(() => {
-      expect(screen.getByText(/Generate Meal Plan/i)).toBeInTheDocument();
-    });
+  //   render(<MealPlanPage />);
 
-    fireEvent.click(screen.getByText(/Generate Meal Plan/i));
+  //   await waitFor(() => {
+  //     expect(screen.getByText(/Generate Meal Plan/i)).toBeInTheDocument();
+  //   });
 
-    await waitFor(() => {
-      // Check if the meals are rendered
-      expect(screen.getByText(/Oatmeal/i)).toBeInTheDocument();
-      expect(screen.getByText(/Salad/i)).toBeInTheDocument();
-      expect(screen.getByText(/Stir Fry/i)).toBeInTheDocument();
-    });
-  });
+  //   fireEvent.click(screen.getByText(/Generate Meal Plan/i));
+
+  //   await waitFor(() => {
+  //     // Check if the meals are rendered
+  //     expect(screen.getByText(/Oatmeal/i)).toBeInTheDocument();
+  //     expect(screen.getByText(/Salad/i)).toBeInTheDocument();
+  //     expect(screen.getByText(/Stir Fry/i)).toBeInTheDocument();
+  //   });
+  // });
 
   test("opens MealDetails modal on 'View Recipe' click", async () => {
     const mockMealPlan = [

@@ -114,9 +114,9 @@ export default function MealPlanPage() {
   <div className="meal-plan-page">
     <Navbar />
     <h1>Meal Plan Page</h1>
-    <button className="generate-button" onClick={handleGenerateMealPlan}>
+    {/* <button className="generate-button" onClick={handleGenerateMealPlan}> // Uncomment when ready to use
       Generate Meal Plan
-    </button>
+    </button> */}
 
     {user.mealPlan.length === 0 ? (
       <p>No meal plan generated yet.</p>

@@ -145,3 +145,5 @@ if(!validPassword) { return NextResponse.json({message: "Invalid password"})} th
 20. There is some kind of issue on the invalid password check on the login test that sometimes passes and sometimes doesn't, and the only way to consistently get it to pass is is I comment out the connect function while testing. Be sure to comment this back in when testing is over
 
 21. Style verify email page
+
+22. Right now, if I select the same preferences over and over again for a meal plan, it will generate the exact same meal plan, which means the generate meal plan button on the meal plan page is essentially useless. This was not always the case, and I think this is occuring due to hardcoding the user id in the mealPlanRoute. However, I have to do that for the app to work until a month has passed and I can allow new users to sign up and create an account, as I 've hit my limit with Edamam. So for now I have commented out the generate meal plan button on the meal plan page as well as any associated tests. This can be updated later, but for now it doens't matter
