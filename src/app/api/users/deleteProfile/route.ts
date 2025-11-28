@@ -18,7 +18,6 @@ export async function DELETE(request: NextRequest){
     return res;
     
     } catch (err) {
-    console.error("Error deleting profile:", err);
     return NextResponse.json({ success: false, message: "Failed to delete profile" }, { status: 500 });
   }
 }

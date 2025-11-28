@@ -39,13 +39,12 @@ afterAll(async () => {
 // Helper function: create auth request
 // ----------------------------
 function mockAuthRequest(userId: string | null) {
-    const headers: Record<string, string> = {
-        "Content-Type": "application/json",
-    };
 
     const req = new NextRequest("http://localhost/api/users/deleteProfile", {
         method: "DELETE",
-        headers,
+        headers: {
+            "Content-type": "application/json",
+        }
     });
 
     if (userId) {
@@ -115,5 +114,32 @@ describe("DELETE /api/users/deleteProfile", () => {
         const existingUser = await User.findById(dbUser._id);
         expect(existingUser).not.toBeNull();
     });
+
+    test("returns 500 if database deletion fails", async () => {
+    // Mock User.findByIdAndDelete to throw an error
+    const originalFindByIdAndDelete = User.findByIdAndDelete;
+    User.findByIdAndDelete = jest.fn().mockImplementation(() => {
+        throw new Error("Database failure");
+    });
+
+    const req = new NextRequest("http://localhost/api/users/deleteProfile", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+    });
+
+    // Add valid token so it passes auth
+    const token = jwt.sign({ id: dbUser._id.toString() }, process.env.TOKEN_SECRET!, { expiresIn: "1h" });
+    req.cookies.set("token", token);
+
+    const res = await deleteProfileHandler(req);
+    expect(res.status).toBe(500);
+
+    const data = await res.json();
+    expect(data.success).toBe(false);
+    expect(data.message).toBe("Failed to delete profile");
+
+    // Restore the original method
+    User.findByIdAndDelete = originalFindByIdAndDelete;
+});
 
 });

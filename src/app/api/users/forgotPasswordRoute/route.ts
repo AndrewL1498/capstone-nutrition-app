@@ -1,16 +1,13 @@
 import {connect} from "@/dbConfig/dbConfig";
 import User from "@/models/userModel";
 import {NextRequest, NextResponse} from "next/server";
-// import dotenv from "dotenv";
 import { sendEmail } from "@/helpers/mailer"
-
-// dotenv.config();
- 
-
-connect()
 
 
 export async function POST(request: NextRequest){
+
+    await connect();
+
     try{
         const reqBody = await request.json();
         const {email} = reqBody;

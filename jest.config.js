@@ -5,6 +5,7 @@ module.exports = {
   testPathIgnorePatterns: ['/node_modules/', '/.next/'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    '\\.css$': '<rootDir>/jest-css-transform.js'
   },
   transform: {
     '^.+\\.[tj]sx?$': 'ts-jest', // <- this tells Jest to use ts-jest for .ts, .tsx, .js, .jsx

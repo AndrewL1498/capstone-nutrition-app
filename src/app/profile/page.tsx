@@ -46,6 +46,9 @@ export default function ProfilePage() {
       toast.success("Profile deleted successfully");
       router.push("/signup")
     } catch (error: any) {
+      if (error?.response?.data?.message) {
+        toast.error(error.response.data.message)
+      } else
       toast.error(error.message);
     }
   }

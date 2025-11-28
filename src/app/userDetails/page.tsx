@@ -194,6 +194,7 @@ const handleClickDishTypesDinner = (label: string) => {
             <input
                 type="number"
                 className="calorie-input"
+                aria-label="Min calories"
                 value={calories.min}
                 onChange={(e) => setCalories(prev => ({ ...prev, min: Number(e.target.value) }))}
             />
@@ -201,6 +202,7 @@ const handleClickDishTypesDinner = (label: string) => {
             <input
                 type="number"
                 className="calorie-input"
+                aria-label="Max calories"
                 value={calories.max}
                 onChange={(e) => setCalories(prev => ({ ...prev, max: Number(e.target.value) }))}
             />

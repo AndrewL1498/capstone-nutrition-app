@@ -143,3 +143,5 @@ if(!validPassword) { return NextResponse.json({message: "Invalid password"})} th
 19. if this app ever goes to production, add required email verification to the loginRoute (optional)
 
 20. There is some kind of issue on the invalid password check on the login test that sometimes passes and sometimes doesn't, and the only way to consistently get it to pass is is I comment out the connect function while testing. Be sure to comment this back in when testing is over
+
+21. Style verify email page
