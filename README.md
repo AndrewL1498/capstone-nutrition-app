@@ -41,3 +41,26 @@ npm run dev
 ### Other notes for testing
 To test this project properly, run npx jest --runInBand. If you run all tests at the same time in parallel it can cause other tests to fail. Also, the backend tests are .ts files, and the front end tests are .tsx files. Because of this, for all the tests to pass you have to have the proper preferences set in tsconfig.json file. Right now the preferences for testing are added below the current preferences and are commented out because they get overwritten when running the app. Comment the current preferences out and testing preferences in for testing, and then switch it back when you want to run the app
 
+<h2>Program walk-through:</h2>
+
+<p align="center">
+Launch the app: <br/>
+<img src="https://imgur.com/0HYzdqA" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+<br />
+<br />
+Visit your profile page:  <br/>
+<img src="https://imgur.com/tg11qC0" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+<br />
+<br />
+Go to the user details page to set your meal plan preferences: <br/>
+<img src="https://imgur.com/30nIclX" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+<br />
+<br />
+You will then be redirected to the meal plan page:  <br/>
+<img src="https://imgur.com/mgIExN3" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+<br />
+<br />
+From here you can view the detail of reach recipe including serving sizes, ingredients, etc.:  <br/>
+<img src="https://imgur.com/cqbWqdq" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+<br />
+<br />
