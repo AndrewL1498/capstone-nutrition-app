@@ -45,7 +45,7 @@ To test this project properly, run npx jest --runInBand. If you run all tests at
 
 <p align="center">
 Launch the app: <br/>
-<img src="https://imgur.com/0HYzdqA" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+<img src="https://imgur.com/0HYzdqA.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 <br />
 <br />
 Visit your profile page:  <br/>
