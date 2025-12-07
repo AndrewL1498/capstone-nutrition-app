@@ -1,0 +1,49 @@
+1. What tech stack will you use for your final project? 
+React, Javascript
+
+
+2. Is the front-end UI or the back-end going to be the focus of your project? Or are you going to make an evenly focused full-stack application? 
+Full Stack
+
+
+3. Will this be a website? A mobile app? Something else? 
+Website and possibly an app
+
+
+4. What goal will your project be designed to achieve? 
+Helping people make simple and easy meal plans that allow them to hit their macros that are generated based on what they like and what they don’t like. It will be very simple and straightforward for them to replace meals with other meals that they like that still hit their macros. They will also be able to adjust what’s in a meal. For example, maybe they found a salad recipe they like, but it includes olives and they hate olives. They can easily remove that from their recipe. They may also be able to add their own meals and recipes in if they would like. I’d like to generate a price on the groceries as well and integrate it with instacart and/or other food delivery services if that’s possible to allow them to be able to order all their groceries for their recipes directly from instacart
+
+
+5. What kind of users will visit your app? In other words, what is the demographic of your users?
+Most likely men around 20-30 who are interested in getting in better shape, most likely in the tech industry since that’s my target demographic for my fitness business
+
+
+6. What data do you plan on using? How are you planning on collecting your data? You may have not picked your actual API yet, which is fine, just outline what kind of data you would like it to contain. You are welcome to create your own API and populate it with data. 
+The EatThisMuch API
+
+
+
+In brief, outline your approach to creating your project (knowing that you may not know everything in advance and that these details might change later). Answer questions like the ones below, but feel free to add more information
+
+What does your database schema look like? 
+User with user data such as their first and last name, weight, desired weight, age, food preferences, food allergies, etc.
+Meals with ingredients, directions, etc.
+Macro targets with calories, protein, etc.
+
+What kinds of issues might you run into with your API? This is especially important if you are creating your own API, web scraping produces notoriously messy data.
+Not sure to be honest
+
+Is there any sensitive information you need to secure? 
+Personal info such as email and possibly banking info if I am going to be charging on the site
+
+What functionality will your app include?
+The ability to build a meal plan for a week or a month (haven't decided yet), the ability to swap out meals, refresh meals for the day and/or week while still hitting the macro goals, the ability to remove or add ingredients, the ability to search for meals that have foods you are looking for, the ability to add your own custom meals in. I would also like it to integrate with instacart or some form of grocery delivery service if possible
+
+What will the user flow look like? 
+Make an account, set up detailed information about themselves so they know what macros they need to hit, then search meals based off of food they like and add them to their meal list, then review their daily and weekly meal plans where they can simply order their groceries through instacart or a meal delivery service
+
+What features make your site more than a CRUD app? What are your stretch goals?
+Features: Authentication and authorization, advanced search and filtering, personalization, data visualization, integrations with 3rd party API's
+Stretch goals: payment processing, support for multiple languages, integration with instacart or some food delivery service,
+
+Task List: https://docs.google.com/spreadsheets/d/1XV3I4sL-3VEJanfZsaRvtOZUtYn4pK-33x7a8ANxXSc/edit?usp=sharing
